@@ -1,0 +1,302 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import { img } from '../lib/images';
+import { nav, site, catalog } from '../lib/data';
+
+const path = Astro.url.pathname;
+const logo = img('/assets/images/brand/logo-mark-light.png');
+---
+
+<header class="header" data-header>
+  <div class="header__inner container">
+    <a href="/" class="header__logo" aria-label={`${site.name} — на головну`}>
+      <Image src={logo} alt={site.name} width={190} densities={[1, 2]} loading="eager" />
+    </a>
+
+    <nav class="header__nav" aria-label="Головне меню">
+      {
+        nav.map((item) => (
+          <a href={item.href} class="header__link" aria-current={path.startsWith(item.href) ? 'page' : undefined}>
+            <span class="link-line">{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="header__actions">
+      <a href={`tel:${site.phones[0].tel}`} class="header__phone">
+        <Icon name="phone" />
+        <span>{site.phones[0].label}</span>
+      </a>
+      <Button size="sm" data-order class="header__cta">Замовити</Button>
+      <button class="burger" type="button" aria-expanded="false" aria-controls="site-menu" data-menu-toggle>
+        <span class="sr-only">Меню</span>
+        <span class="burger__line"></span>
+        <span class="burger__line"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="menu" id="site-menu" data-menu aria-hidden="true">
+  <div class="menu__bg" data-menu-bg></div>
+  <div class="menu__inner container">
+    <nav class="menu__nav" aria-label="Мобільне меню">
+      <a href="/" class="menu__link" data-menu-item><span class="mono">00</span><span>Головна</span></a>
+      {
+        nav.map((item, i) => (
+          <a href={item.href} class="menu__link" data-menu-item>
+            <span class="mono">{String(i + 1).padStart(2, '0')}</span>
+            <span>{item.label}</span>
+          </a>
+        ))
+      }
+    </nav>
+    <div class="menu__side" data-menu-item>
+      <a href={catalog.priceList.file} class="menu__price" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>
+        <Icon name="file" />
+        <span>{catalog.priceList.label}</span>
+      </a>
+      <div class="menu__contacts">
+        {site.phones.map((p) => <a href={`tel:${p.tel}`} class="link-line">тел: {p.label}</a>)}
+        <a href={`mailto:${site.email}`} class="link-line">пошта: {site.email}</a>
+      </div>
+      <p class="menu__address muted">{site.shortName}<br />{site.addresses[0].text}</p>
+      <p class="mono muted">© {site.foundedYear} – {new Date().getFullYear()} {site.name}</p>
+    </div>
+  </div>
+</div>
+
+<style>
+  .header {
+    position: fixed;
+    inset: 0 0 auto;
+    z-index: 100;
+    height: var(--header-h);
+    transition: transform 0.6s var(--ease), background 0.4s, border-color 0.4s;
+    border-bottom: 1px solid transparent;
+  }
+
+  .header.is-scrolled {
+    background: rgba(13, 13, 12, 0.72);
+    backdrop-filter: blur(14px) saturate(1.2);
+    border-color: var(--line);
+  }
+
+  .header.is-hidden {
+    transform: translateY(-100%);
+  }
+
+  :global(.menu-open) .header {
+    transform: none;
+    background: transparent;
+    border-color: transparent;
+    backdrop-filter: none;
+  }
+
+  .header__inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    height: 100%;
+  }
+
+  .header__logo {
+    position: relative;
+    z-index: 2;
+    flex: none;
+  }
+
+  .header__logo img {
+    width: clamp(150px, 14vw, 190px);
+    height: auto;
+  }
+
+  .header__nav {
+    display: none;
+    gap: clamp(18px, 2.4vw, 40px);
+    font-size: 0.92rem;
+  }
+
+  .header__link {
+    color: var(--text-2);
+    transition: color 0.3s;
+  }
+
+  .header__link:hover,
+  .header__link[aria-current='page'] {
+    color: var(--text);
+  }
+
+  .header__link[aria-current='page'] .link-line::after {
+    transform: scaleX(1);
+    background: var(--accent);
+  }
+
+  .header__actions {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .header__phone {
+    display: none;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.92rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .header__phone :global(.icon) {
+    width: 16px;
+    color: var(--accent);
+  }
+
+  .header__cta {
+    display: none;
+  }
+
+  .burger {
+    display: grid;
+    place-content: center;
+    gap: 7px;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 1px solid var(--line-2);
+    background: rgba(13, 13, 12, 0.4);
+  }
+
+  .burger__line {
+    width: 18px;
+    height: 1.5px;
+    background: var(--text);
+    transition: transform 0.5s var(--ease);
+  }
+
+  :global(.menu-open) .burger__line:first-of-type {
+    transform: translateY(4.25px) rotate(45deg);
+  }
+
+  :global(.menu-open) .burger__line:last-of-type {
+    transform: translateY(-4.25px) rotate(-45deg);
+  }
+
+  @media (min-width: 640px) {
+    .header__cta {
+      display: inline-flex;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .header__nav {
+      display: flex;
+    }
+  }
+
+  @media (min-width: 1280px) {
+    .header__phone {
+      display: inline-flex;
+    }
+  }
+
+  .menu {
+    position: fixed;
+    inset: 0;
+    z-index: 99;
+    visibility: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+  }
+
+  :global(.menu-open) .menu {
+    visibility: visible;
+  }
+
+  .menu__bg {
+    position: fixed;
+    inset: 0;
+    background: var(--bg-2);
+    background-image: var(--granite);
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .menu__inner {
+    position: relative;
+    display: grid;
+    gap: 48px;
+    min-height: 100%;
+    padding-top: calc(var(--header-h) + 32px);
+    padding-bottom: 40px;
+    align-content: space-between;
+  }
+
+  .menu__nav {
+    display: grid;
+  }
+
+  .menu__link {
+    display: flex;
+    align-items: baseline;
+    gap: 18px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-display);
+    font-size: clamp(1.7rem, 6vw, 4rem);
+    font-weight: 500;
+    letter-spacing: -0.03em;
+    text-transform: uppercase;
+    transition: color 0.3s, padding-left 0.5s var(--ease);
+  }
+
+  .menu__link .mono {
+    color: var(--accent);
+  }
+
+  .menu__link:hover {
+    color: var(--accent);
+    padding-left: 12px;
+  }
+
+  .menu__side {
+    display: grid;
+    gap: 24px;
+    align-content: start;
+  }
+
+  .menu__price {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    justify-self: start;
+    padding: 14px 22px;
+    border-radius: 999px;
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .menu__contacts {
+    display: grid;
+    gap: 6px;
+    justify-items: start;
+    font-size: 1.05rem;
+  }
+
+  .menu__address {
+    max-width: 44ch;
+    font-size: 0.9rem;
+  }
+
+  @media (min-width: 960px) {
+    .menu__inner {
+      grid-template-columns: 1.6fr 1fr;
+      align-items: end;
+    }
+  }
+</style>

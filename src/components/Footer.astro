@@ -1,0 +1,132 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import { img } from '../lib/images';
+import { nav, site, catalog } from '../lib/data';
+
+const logo = img('/assets/images/brand/logo-mark-light.png');
+const year = new Date().getFullYear();
+---
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer__top">
+      <div class="footer__brand">
+        <Image src={logo} alt={site.name} width={220} densities={[1, 2]} />
+        <p class="muted">{site.slogans[0]}.</p>
+      </div>
+      <nav class="footer__col" aria-label="Розділи">
+        <p class="mono muted">Розділи</p>
+        <a href="/" class="link-line">Головна</a>
+        {nav.map((n) => <a href={n.href} class="link-line">{n.label}</a>)}
+        <a href={catalog.priceList.file} class="link-line" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>{catalog.priceList.label}</a>
+      </nav>
+      <div class="footer__col">
+        <p class="mono muted">Контакти</p>
+        {site.phones.map((p) => <a href={`tel:${p.tel}`} class="link-line">{p.label}</a>)}
+        <a href={`mailto:${site.email}`} class="link-line">{site.email}</a>
+        <p class="muted">{site.hours.weekdays}<br />{site.hours.weekend}</p>
+      </div>
+      <div class="footer__col">
+        <p class="mono muted">Адреса</p>
+        <p>{site.addresses[0].text}</p>
+        <a href={site.geo.mapsUrl} target="_blank" rel="noopener" class="footer__route"><Icon name="route" />Прокласти маршрут</a>
+      </div>
+    </div>
+
+    <p class="footer__mega" aria-hidden="true" data-footer-mega>
+      <span>Любимівський</span>
+      <span>кар’єр</span>
+    </p>
+
+    <div class="footer__bottom mono muted">
+      <span>© {site.foundedYear} – {year} ТОВ Любимівський Кар’єр</span>
+      <span>ЄДРПОУ {site.edrpou}</span>
+      <span>{site.geo.lat.toFixed(4)}° N, {site.geo.lng.toFixed(4)}° E</span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    position: relative;
+    padding: clamp(72px, 10vw, 140px) 0 calc(28px + var(--mobilebar, 0px));
+    background: var(--bg);
+    border-top: 1px solid var(--line);
+    overflow: hidden;
+  }
+
+  .footer__top {
+    display: grid;
+    gap: 40px;
+  }
+
+  .footer__brand {
+    display: grid;
+    gap: 20px;
+    max-width: 360px;
+  }
+
+  .footer__brand img {
+    width: 220px;
+    height: auto;
+  }
+
+  .footer__col {
+    display: grid;
+    gap: 10px;
+    align-content: start;
+    justify-items: start;
+    font-size: 0.95rem;
+  }
+
+  .footer__col .mono {
+    margin-bottom: 6px;
+  }
+
+  .footer__route {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 6px;
+    color: var(--accent);
+  }
+
+  .footer__mega {
+    display: grid;
+    margin: clamp(56px, 8vw, 120px) 0 28px;
+    font-family: var(--font-display);
+    font-size: clamp(2.2rem, 8.4vw, 10.5rem);
+    font-weight: 700;
+    line-height: 0.86;
+    letter-spacing: -0.05em;
+    text-transform: uppercase;
+    color: var(--bg-3);
+  }
+
+  .footer__mega span:last-child {
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line-2);
+  }
+
+  .footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px 32px;
+    justify-content: space-between;
+    padding-top: 24px;
+    border-top: 1px solid var(--line);
+  }
+
+  @media (min-width: 720px) {
+    .footer__top {
+      grid-template-columns: 1fr 1fr;
+    }
+  }
+
+  @media (min-width: 1100px) {
+    .footer__top {
+      grid-template-columns: 1.4fr 1fr 1fr 1.2fr;
+    }
+  }
+</style>

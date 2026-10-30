@@ -1,0 +1,138 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Stats from '../../components/Stats.astro';
+import Advantages from '../../components/Advantages.astro';
+import VideoBlock from '../../components/VideoBlock.astro';
+import Contacts from '../../components/Contacts.astro';
+import Picture from '../../components/Picture.astro';
+import Button from '../../components/Button.astro';
+
+const directions = [
+  { title: 'Щебінь', text: 'Фракції: 5-10, 5-20, 20-40, 40-70 мм. Ідеально для бетону та асфальтобетону.', image: '/assets/images/quarry/frontalnyi-navantazhuvach-sklad.jpg' },
+  { title: 'Відсів та Бут', text: 'Гранітний відсів (0-5 мм) та бутовий камінь для ландшафтних і фундаментних робіт.', image: '/assets/images/quarry/drobylnyi-kompleks-i-sklad-shchebeniu.jpg' },
+  { title: 'Дорожні суміші', text: 'ЩПС для формування надійної основи автошляхів будь-якої складності.', image: '/assets/images/quarry/drobylno-sortuvalna-stantsiia.jpg' },
+];
+---
+
+<Base
+  title="Про підприємство — ТОВ «Любимівський кар’єр», Дніпро"
+  description="ТОВ «Любимівський кар’єр» — видобуток граніту та виробництво щебеню з власного кар’єру в Любимівці під Дніпром. 1-й клас радіоактивності, сучасне обладнання, доставка авто та залізницею по Україні."
+  breadcrumb="Про підприємство"
+  ogImage="/assets/images/quarry/kotlovan-tekhnika-v-roboti.jpg"
+>
+  <PageHero
+    eyebrow="Про підприємство"
+    title="Про підприємство"
+    lead="ТОВ «Любимівський кар’єр» — це сучасне промислове підприємство з багаторічним досвідом. Ми є одним із провідних постачальників нерудних будівельних матеріалів у Дніпровському регіоні."
+    image="/assets/images/quarry/kotlovan-tekhnika-v-roboti.jpg"
+    alt="Техніка Caterpillar та Volvo в котловані Любимівського кар’єру"
+  />
+
+  <section class="section" aria-label="Про нас">
+    <div class="container about__grid">
+      <p class="about__quote h3" data-reveal>Ми прагнемо бути фундаментом для вашого будівництва, надаючи природні матеріали найвищого ґатунку.</p>
+      <div class="about__text">
+        <p class="lead" data-reveal>Наші граніти відзначаються високою міцністю, морозостійкістю та екологічною безпекою. Продукція повністю відповідає державним стандартам (ДСТУ).</p>
+        <p class="muted" data-reveal>ТОВ «Любимівський кар’єр» — це поєднання природних багатств України та сучасних технологій переробки.</p>
+        <div data-reveal><Button href="/production/">Продукція та ціни</Button></div>
+      </div>
+    </div>
+    <div class="container">
+      <Stats />
+    </div>
+  </section>
+
+  <section class="section section--granite" aria-labelledby="dir-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Що ми виробляємо</p>
+        <h2 class="h2" id="dir-title" data-split>Три напрямки</h2>
+      </div>
+      <div class="dirs">
+        {
+          directions.map((d, i) => (
+            <article class="dirs__item">
+              <div class="dirs__media media tone" data-reveal="mask">
+                <Picture src={d.image} alt={d.title} sizes="(min-width: 960px) 33vw, 100vw" />
+              </div>
+              <span class="mono accent">0{i + 1}</span>
+              <h3 class="h3">{d.title}</h3>
+              <p class="muted">{d.text}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section section--tight" aria-labelledby="adv-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Чому ми</p>
+        <h2 class="h2" id="adv-title" data-split>Наші переваги</h2>
+      </div>
+      <Advantages />
+    </div>
+  </section>
+
+  <VideoBlock />
+
+  <Contacts />
+</Base>
+
+<style>
+  .about__grid {
+    display: grid;
+    gap: 32px;
+    margin-bottom: clamp(56px, 8vw, 112px);
+  }
+
+  .about__quote {
+    font-size: clamp(1.5rem, 3vw, 2.6rem);
+    line-height: 1.15;
+    text-wrap: balance;
+  }
+
+  .about__text {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+    justify-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .about__grid {
+      grid-template-columns: 1.2fr 1fr;
+      gap: clamp(48px, 7vw, 120px);
+    }
+  }
+
+  .dirs {
+    display: grid;
+    gap: 40px;
+  }
+
+  .dirs__item {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+  }
+
+  .dirs__media {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+    margin-bottom: 10px;
+  }
+
+  @media (min-width: 960px) {
+    .dirs {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+    }
+
+    .dirs__item:nth-child(2) {
+      margin-top: 80px;
+    }
+  }
+</style>

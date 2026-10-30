@@ -1,0 +1,36 @@
+{
+  "certificates": [
+    {
+      "title": "Сертифікат відповідності — Щебінь гранітний",
+      "image": "/assets/images/docs/sertyfikat-vidpovidnosti-shchebin-granitnyi.jpg"
+    },
+    {
+      "title": "Сертифікат відповідності — Відсів 0-5 мм",
+      "image": "/assets/images/docs/sertyfikat-vidpovidnosti-vidsiv-0-5.jpg"
+    },
+    {
+      "title": "Сертифікат відповідності — Камінь бутовий",
+      "image": "/assets/images/docs/sertyfikat-vidpovidnosti-kamin-butovyi.jpg"
+    },
+    {
+      "title": "Сертифікат відповідності №201006 — Щебінь гранітний 5–120 мм",
+      "image": "/assets/images/docs/sertyfikat-shchebin-0-5-120.jpg"
+    },
+    {
+      "title": "Радіаційний сертифікат — щебінь, відсів, камінь бутовий",
+      "image": "/assets/images/docs/pasport-radiatsiinyi.jpg"
+    }
+  ],
+  "files": [
+    { "title": "Дозвіл на користування надрами", "file": "/docs/dozvil-na-korystuvannia-nadramy.pdf" },
+    { "title": "Паспорт радіаційної якості щебеневої продукції", "file": "/docs/pasport-radiatsiinoi-yakosti.pdf" },
+    { "title": "Санітарно-епідемологічний висновок", "file": "/docs/sanitarno-epidemiolohichnyi-vysnovok.pdf" }
+  ],
+  "specs": [
+    { "label": "Марка міцності", "value": ["М1200 – М1400"] },
+    { "label": "Морозостійкість", "value": ["F300"] },
+    { "label": "Лещадність", "value": ["фракція 5-10 мм — 4,9%", "фракція 5-20 мм — 19,6%", "фракція 10-20 мм — 15%"] },
+    { "label": "Вміст пилоподібних і глинистих частин, не більше", "value": ["фракція 5-10 — 0,5%", "фракція 5-20 — 0,4%", "відсів (0-5) — 0,5-0,8%"] },
+    { "label": "Клас радіоактивності", "value": ["1 клас (використання без обмежень)"] }
+  ]
+}

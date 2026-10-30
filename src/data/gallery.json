@@ -1,0 +1,19 @@
+{
+  "items": [
+    { "image": "/assets/images/quarry/kotlovan-tekhnika-v-roboti.jpg", "caption": "Техніка Caterpillar та Volvo в котловані кар’єру" },
+    { "image": "/assets/images/quarry/karyer-dnipro-shchebin.jpg", "caption": "Робота кар'єрного екскаватора на розробці гранітного пласта" },
+    { "image": "/assets/images/quarry/panorama-zghory.jpg", "caption": "Панорама Любимівського кар’єру з гори" },
+    { "image": "/assets/images/quarry/ekskavator-samoskyd-volvo.jpg", "caption": "Завантаження гранітної породи екскаватором у самоскид Volvo" },
+    { "image": "/assets/images/quarry/drobylnyi-kompleks-i-sklad-shchebeniu.jpg", "caption": "Дробильно-сортувальний комплекс і склад щебеню" },
+    { "image": "/assets/images/quarry/konveierna-liniya.jpg", "caption": "Конвеєрна система подачі та складування гранітного відсіву" },
+    { "image": "/assets/images/quarry/karyer-dnipro.jpg", "caption": "Любимівський кар'єр — Дніпро" },
+    { "image": "/assets/images/quarry/frontalnyi-navantazhuvach-sklad.jpg", "caption": "Фронтальний навантажувач Caterpillar на фоні насипів готового щебеню" },
+    { "image": "/assets/images/quarry/vydobutok-kameniu.jpg", "caption": "Видобуток каменю, Любимівка, Дніпропетровська область" },
+    { "image": "/assets/images/quarry/ekskavator-cat-zyma.jpg", "caption": "Екскаватор Caterpillar 365C у гранітному кар'єрі взимку" },
+    { "image": "/assets/images/quarry/tekhnichna-voda.jpg", "caption": "Технічна вода та ландшафт кар’єру" },
+    { "image": "/assets/images/quarry/ekskavator-vydobutok-granitu.jpg", "caption": "Потужний кар'єрний екскаватор на розробці гранітного пласта" },
+    { "image": "/assets/images/quarry/vyhlyad-na-dnipro.jpg", "caption": "Вигляд на Дніпро та Любимівський кар’єр" },
+    { "image": "/assets/images/quarry/ekskavator-ta-navantazhuvach-cat.jpg", "caption": "Гусеничний екскаватор і навантажувач Caterpillar у кар'єрі" },
+    { "image": "/assets/images/quarry/drobylno-sortuvalna-stantsiia.jpg", "caption": "Дробильно-сортувальна лінія для виробництва фракційного щебеню" }
+  ]
+}

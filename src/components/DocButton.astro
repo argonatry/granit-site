@@ -1,0 +1,35 @@
+---
+import { large } from '../lib/images';
+
+interface Props {
+  path: string;
+  title: string;
+  class?: string;
+}
+
+const { path, title, class: className } = Astro.props;
+const isPdf = path.toLowerCase().endsWith('.pdf');
+const image = isPdf ? null : await large(path, 2000);
+const href = isPdf ? path : image!.original;
+---
+
+{
+  isPdf ? (
+    <a href={href} class={className} data-pdf={path} data-pdf-title={title} target="_blank" rel="noopener">
+      <slot />
+    </a>
+  ) : (
+    <a
+      href={href}
+      class={className}
+      data-doc={image!.src}
+      data-doc-w={image!.width}
+      data-doc-h={image!.height}
+      data-doc-title={title}
+      target="_blank"
+      rel="noopener"
+    >
+      <slot />
+    </a>
+  )
+}

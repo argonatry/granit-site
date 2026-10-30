@@ -1,0 +1,21 @@
+import { initScroll } from './scroll';
+import { initSelects } from './select';
+import { initHeader } from './header';
+import { initForms } from './forms';
+import { initCatalog } from './catalog';
+import { initCalculator } from './calculator';
+import { initMedia } from './media';
+import { initMap } from './map';
+import { initPointer } from './pointer';
+import { initMotion } from './motion';
+
+initScroll();
+initSelects();
+initHeader();
+initForms();
+initCatalog();
+initCalculator();
+initMedia();
+initMap();
+initPointer();
+initMotion();

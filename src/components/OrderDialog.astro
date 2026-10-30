@@ -1,0 +1,163 @@
+---
+import Icon from './Icon.astro';
+import Button from './Button.astro';
+import ProductSelect from './ProductSelect.astro';
+import { site } from '../lib/data';
+
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<dialog class="dialog order" id="order-dialog" aria-labelledby="order-title" data-order-dialog>
+  <button class="dialog__close" type="button" data-dialog-close aria-label="Закрити"><Icon name="close" /></button>
+
+  <div class="order__body" data-order-body>
+    <p class="eyebrow">ТОВ «Любимівський кар’єр»</p>
+    <h2 class="order__title h3" id="order-title">Замовлення продукції</h2>
+
+    <form class="order__form" data-form="order" novalidate>
+      <input type="hidden" name="type" value="order" />
+      <input type="hidden" name="startedAt" value="" />
+      <label class="hp" aria-hidden="true">Сайт <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
+
+      <div class="field">
+        <label class="field__label" for="order-product">Продукція <b>*</b></label>
+        <ProductSelect id="order-product" name="product" required />
+      </div>
+
+      <div class="order__row">
+        <div class="field">
+          <label class="field__label" for="order-tonnes">Обсяг, т</label>
+          <input class="input" id="order-tonnes" name="tonnes" type="number" inputmode="decimal" min="1" max="100000" step="1" placeholder="Напр. 25" />
+          <p class="field__error" data-error="tonnes"></p>
+        </div>
+        <div class="order__estimate" data-order-estimate aria-live="polite">
+          <span class="field__label">Орієнтовно, з ПДВ</span>
+          <strong data-order-total>—</strong>
+        </div>
+      </div>
+
+      <div class="order__row">
+        <div class="field">
+          <label class="field__label" for="order-name">Ваше ім'я <b>*</b></label>
+          <input class="input" id="order-name" name="name" type="text" autocomplete="name" required maxlength="80" placeholder="Як до вас звертатися?" />
+          <p class="field__error" data-error="name"></p>
+        </div>
+        <div class="field">
+          <label class="field__label" for="order-phone">Телефон <b>*</b></label>
+          <input class="input" id="order-phone" name="phone" type="tel" autocomplete="tel" inputmode="tel" required placeholder="+38 (0__) ___-__-__" data-phone />
+          <p class="field__error" data-error="phone"></p>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="order-email">Email</label>
+        <input class="input" id="order-email" name="email" type="email" autocomplete="email" maxlength="120" placeholder="example@mail.com" />
+        <p class="field__error" data-error="email"></p>
+      </div>
+
+      <div class="field">
+        <label class="field__label" for="order-message">Коментар <span class="muted">(макс. 400 символів)</span></label>
+        <textarea class="input" id="order-message" name="message" rows="3" maxlength="400" placeholder="Адреса доставки, терміни, питання"></textarea>
+      </div>
+
+      {turnstileKey && <div class="cf-turnstile" data-sitekey={turnstileKey} data-theme="dark" data-size="flexible" data-appearance="interaction-only"></div>}
+
+      <Button type="submit" block data-submit>Надіслати запит</Button>
+      <p class="form-status" data-form-status role="status"></p>
+      <p class="order__note muted">Або зателефонуйте: <a href={`tel:${site.phones[0].tel}`}>{site.phones[0].label}</a></p>
+    </form>
+  </div>
+
+  <div class="order__success" data-order-success hidden>
+    <div class="order__check"><Icon name="check" /></div>
+    <h2 class="h3">Дякуємо!</h2>
+    <p class="muted">Вашу заявку успішно відправлено. Ми зв'яжемося з вами найближчим часом.</p>
+    <Button variant="ghost" data-dialog-close icon={false}>Закрити</Button>
+  </div>
+</dialog>
+
+<style>
+  .order__body,
+  .order__success {
+    padding: clamp(28px, 5vw, 48px);
+  }
+
+  .order__title {
+    margin: 14px 0 28px;
+    padding-right: 48px;
+  }
+
+  .order__form {
+    display: grid;
+    gap: 14px;
+  }
+
+  .order__row {
+    display: grid;
+    gap: 14px;
+  }
+
+  @media (min-width: 560px) {
+    .order__row {
+      grid-template-columns: 1fr 1fr;
+      align-items: start;
+    }
+  }
+
+  .order__estimate {
+    display: grid;
+    gap: 8px;
+    align-content: center;
+    min-height: 54px;
+    padding: 12px 18px;
+    border-radius: var(--radius-sm);
+    background: var(--bg-3);
+  }
+
+  .order__estimate strong {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    color: var(--accent);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .order__note {
+    font-size: 0.88rem;
+    text-align: center;
+  }
+
+  .order__note a {
+    color: var(--text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+
+  .order__success {
+    display: grid;
+    gap: 18px;
+    justify-items: center;
+    text-align: center;
+    padding-block: 64px;
+  }
+
+  .order__success[hidden] {
+    display: none;
+  }
+
+  .order__check {
+    display: grid;
+    place-items: center;
+    width: 84px;
+    height: 84px;
+    border-radius: 50%;
+    background: var(--accent);
+    color: var(--accent-ink);
+  }
+
+  .order__check :global(.icon) {
+    width: 40px;
+    height: 40px;
+    stroke-width: 2.2;
+  }
+</style>

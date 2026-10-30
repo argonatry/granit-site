@@ -1,0 +1,145 @@
+---
+import Base from '../layouts/Base.astro';
+import Hero from '../components/Hero.astro';
+import Marquee from '../components/Marquee.astro';
+import Stats from '../components/Stats.astro';
+import Catalog from '../components/Catalog.astro';
+import Calculator from '../components/Calculator.astro';
+import VideoBlock from '../components/VideoBlock.astro';
+import Advantages from '../components/Advantages.astro';
+import Gallery from '../components/Gallery.astro';
+import Documents from '../components/Documents.astro';
+import Contacts from '../components/Contacts.astro';
+import Button from '../components/Button.astro';
+import Picture from '../components/Picture.astro';
+import { catalog, products, site } from '../lib/data';
+import { img } from '../lib/images';
+import { productsSchema } from '../lib/schema';
+import { getImage } from 'astro:assets';
+
+const productImages = Object.fromEntries(
+  await Promise.all(products.map(async (p) => [p.id, (await getImage({ src: img(p.image), width: 300, format: 'jpg' })).src])),
+);
+---
+
+<Base
+  title="ТОВ «Любимівський кар’єр» — щебінь, бут, відсів у Дніпрі від виробника"
+  description="Гранітний щебінь 5-10, 10-20, 5-20, 20-40, 40-70 мм, відсів, ЩПС, бутовий камінь і суглинок з власного кар’єру в Дніпрі. Ціни з ПДВ, сертифікати ДСТУ, 1 клас радіоактивності. ЄДРПОУ 23935242."
+  schema={[productsSchema(productImages, `${site.url}/`)]}
+>
+  <Hero />
+  <Marquee />
+
+  <section class="section section--granite intro" aria-labelledby="intro-title">
+    <div class="container">
+      <div class="intro__grid">
+        <div class="intro__text">
+          <p class="eyebrow">Про підприємство</p>
+          <h2 class="h2" id="intro-title" data-split>Фундамент для вашого будівництва</h2>
+          <p class="lead" data-reveal>
+            ТОВ «Любимівський кар’єр» — це сучасне промислове підприємство з багаторічним досвідом. Ми є одним із провідних постачальників нерудних будівельних матеріалів у Дніпровському регіоні.
+          </p>
+          <p class="muted" data-reveal>
+            Наші граніти відзначаються високою міцністю, морозостійкістю та екологічною безпекою. Продукція повністю відповідає державним стандартам (ДСТУ).
+          </p>
+          <div data-reveal><Button href="/about/" variant="ghost">Детальніше про нас</Button></div>
+        </div>
+        <div class="intro__media media tone" data-reveal="mask">
+          <Picture src="/assets/images/quarry/kotlovan-tekhnika-v-roboti.jpg" alt="Техніка Caterpillar та Volvo в котловані Любимівського кар’єру" sizes="(min-width: 1024px) 45vw, 100vw" />
+        </div>
+      </div>
+      <Stats />
+    </div>
+  </section>
+
+  <section class="section" id="products" aria-labelledby="products-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">Продукція</p>
+          <h2 class="h2" id="products-title" data-split>Наша продукція</h2>
+        </div>
+        <div class="products__aside">
+          <p class="lead">Ціни вказані за тонну з ПДВ. Кожна партія має сертифікат відповідності та радіаційний паспорт.</p>
+          <div class="products__links">
+            <Button href="/production/" variant="ghost" size="sm">Усі деталі</Button>
+            <Button href={catalog.priceList.file} variant="ghost" size="sm" icon="file" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>{catalog.priceList.label}</Button>
+          </div>
+        </div>
+      </div>
+      <Catalog />
+    </div>
+  </section>
+
+  <Calculator />
+
+  <VideoBlock />
+
+  <section class="section section--tight" aria-labelledby="adv-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Чому ми</p>
+        <h2 class="h2" id="adv-title" data-split>Наші переваги</h2>
+      </div>
+      <Advantages />
+    </div>
+  </section>
+
+  <Gallery />
+
+  <section class="section section--granite" aria-labelledby="docs-title">
+    <div class="container">
+      <div class="section-head section-head--split">
+        <div>
+          <p class="eyebrow">Документи</p>
+          <h2 class="h2" id="docs-title" data-split>Якість, підтверджена документами</h2>
+        </div>
+        <div class="products__aside">
+          <p class="lead">Сертифікати відповідності ДСТУ, радіаційний сертифікат, дозвіл на користування надрами — переглядайте прямо на сайті.</p>
+          <div class="products__links"><Button href="/sertifikati-i-pasporti/" variant="ghost" size="sm">Усі документи</Button></div>
+        </div>
+      </div>
+      <Documents limit={4} />
+    </div>
+  </section>
+
+  <Contacts map />
+</Base>
+
+<style>
+  .intro__grid {
+    display: grid;
+    gap: 48px;
+    margin-bottom: clamp(56px, 8vw, 112px);
+  }
+
+  .intro__text {
+    display: grid;
+    gap: 24px;
+    align-content: center;
+    justify-items: start;
+  }
+
+  .intro__media {
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius);
+  }
+
+  @media (min-width: 1024px) {
+    .intro__grid {
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(48px, 7vw, 120px);
+    }
+  }
+
+  .products__aside {
+    display: grid;
+    gap: 20px;
+  }
+
+  .products__links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+</style>

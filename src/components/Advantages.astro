@@ -1,0 +1,55 @@
+---
+import { site } from '../lib/data';
+---
+
+<div class="adv">
+  {
+    site.advantages.map((a, i) => (
+      <div class="adv__item" data-reveal>
+        <span class="mono accent">0{i + 1}</span>
+        <h3 class="h3">{a.title}</h3>
+        <p class="muted">{a.text}</p>
+      </div>
+    ))
+  }
+</div>
+
+<style>
+  .adv {
+    display: grid;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .adv__item {
+    display: grid;
+    gap: 14px;
+    align-content: start;
+    padding: clamp(24px, 3vw, 40px);
+    background: var(--bg);
+    transition: background 0.4s;
+  }
+
+  .adv__item:hover {
+    background: var(--bg-2);
+  }
+
+  @media (min-width: 720px) {
+    .adv {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1200px) {
+    .adv {
+      grid-template-columns: repeat(4, 1fr);
+    }
+
+    .adv__item {
+      min-height: 280px;
+    }
+  }
+</style>

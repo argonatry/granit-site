@@ -1,0 +1,31 @@
+---
+import { Picture as AstroPicture } from 'astro:assets';
+import { img } from '../lib/images';
+
+interface Props {
+  src: string;
+  alt: string;
+  widths?: number[];
+  sizes?: string;
+  class?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'low' | 'auto';
+}
+
+const { src, alt, widths = [480, 800, 1280], sizes = '100vw', class: className, loading = 'lazy', fetchpriority } = Astro.props;
+const image = img(src);
+const usable = widths.filter((w) => w <= image.width);
+const final = usable.length ? usable : [image.width];
+---
+
+<AstroPicture
+  src={image}
+  alt={alt}
+  widths={final}
+  sizes={sizes}
+  formats={['avif', 'webp']}
+  class={className}
+  loading={loading}
+  decoding="async"
+  fetchpriority={fetchpriority}
+/>

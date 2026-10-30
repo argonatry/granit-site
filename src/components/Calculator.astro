@@ -1,0 +1,199 @@
+---
+import Button from './Button.astro';
+import ProductSelect from './ProductSelect.astro';
+import { products } from '../lib/data';
+
+const priced = products.filter((p) => p.price);
+---
+
+<section class="calc section section--light" id="calculator" aria-labelledby="calc-title">
+  <div class="container calc__grid">
+    <div class="calc__intro">
+      <p class="eyebrow">Калькулятор</p>
+      <h2 class="h2" id="calc-title" data-split>Порахуйте вартість</h2>
+      <p class="lead">Оберіть продукцію та кількість тонн — побачите орієнтовну вартість за діючим прайсом з ПДВ. Точну вартість з доставкою уточнить менеджер.</p>
+    </div>
+
+    <form class="calc__panel" data-calc data-reveal onsubmit="return false">
+      <div class="field">
+        <label class="field__label" for="calc-product">Продукція</label>
+        <ProductSelect id="calc-product" selected={priced[0]?.id} data-calc-product />
+      </div>
+
+      <div class="field">
+        <div class="calc__qty-head">
+          <label class="field__label" for="calc-tonnes">Кількість, тонн</label>
+          <input class="calc__qty-input" type="number" inputmode="decimal" min="1" max="100000" step="1" value="25" id="calc-tonnes" data-calc-tonnes />
+        </div>
+        <input class="calc__range" type="range" min="1" max="1500" step="1" value="25" aria-label="Кількість тонн" data-calc-range />
+        <div class="calc__presets" role="group" aria-label="Швидкий вибір">
+          {[10, 25, 50, 100, 500, 1000].map((t) => <button type="button" class="chip" data-calc-preset={t}>{t} т</button>)}
+        </div>
+      </div>
+
+      <div class="calc__result" aria-live="polite">
+        <div>
+          <p class="field__label">Ціна за тонну</p>
+          <p class="calc__unit" data-calc-unit>—</p>
+        </div>
+        <div>
+          <p class="field__label">Разом з ПДВ</p>
+          <p class="calc__total"><span data-calc-total>—</span></p>
+        </div>
+        <p class="calc__note" data-calc-note></p>
+      </div>
+
+      <Button variant="dark" block data-calc-order>Оформити заявку</Button>
+    </form>
+  </div>
+</section>
+
+<style>
+  .calc__grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 48px;
+    align-items: start;
+  }
+
+  @media (min-width: 1024px) {
+    .calc__grid {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+      gap: 80px;
+    }
+
+    .calc__intro {
+      position: sticky;
+      top: calc(var(--header-h) + 40px);
+    }
+  }
+
+  .calc__intro {
+    display: grid;
+    gap: 24px;
+  }
+
+  .calc__panel {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: clamp(22px, 4vw, 44px);
+    border-radius: 24px;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+  }
+
+  .calc__qty-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+
+  .calc__qty-input {
+    width: 140px;
+    padding: 6px 0;
+    border: 0;
+    border-bottom: 1px solid var(--line-2);
+    background: transparent;
+    text-align: right;
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+    font-weight: 500;
+    letter-spacing: -0.03em;
+  }
+
+  .calc__qty-input:focus {
+    outline: none;
+    border-color: var(--accent);
+  }
+
+  .calc__range {
+    --p: 2%;
+    width: 100%;
+    height: 28px;
+    appearance: none;
+    background: transparent;
+    cursor: pointer;
+  }
+
+  .calc__range::-webkit-slider-runnable-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent) var(--p), var(--line-2) var(--p));
+  }
+
+  .calc__range::-moz-range-track {
+    height: 4px;
+    border-radius: 4px;
+    background: linear-gradient(90deg, var(--accent) var(--p), var(--line-2) var(--p));
+  }
+
+  .calc__range::-webkit-slider-thumb {
+    appearance: none;
+    width: 26px;
+    height: 26px;
+    margin-top: -11px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 6px solid var(--bg-2);
+    box-shadow: 0 0 0 1px var(--line-2);
+  }
+
+  .calc__range::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: var(--text);
+    border: 6px solid var(--bg-2);
+    box-shadow: 0 0 0 1px var(--line-2);
+  }
+
+  .calc__presets {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .calc__presets .chip {
+    min-height: 36px;
+    padding: 0 14px;
+    font-size: 0.85rem;
+  }
+
+  .calc__result {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    gap: 16px 24px;
+    padding: 24px 0 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .calc__result > div:nth-child(2) {
+    text-align: right;
+  }
+
+  .calc__unit {
+    font-family: var(--font-display);
+    font-size: 1.3rem;
+    font-weight: 500;
+    margin-top: 6px;
+  }
+
+  .calc__total {
+    margin-top: 6px;
+    font-family: var(--font-display);
+    font-size: clamp(1.5rem, 6.4vw, 3.4rem);
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .calc__note {
+    grid-column: 1 / -1;
+    min-height: 1.4em;
+    font-size: 0.88rem;
+    color: #b0480a;
+  }
+</style>

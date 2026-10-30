@@ -1,0 +1,38 @@
+---
+import { catalog, products, productTitle } from '../lib/data';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  id: string;
+  name?: string;
+  selected?: string;
+  required?: boolean;
+  [key: string]: unknown;
+}
+
+const { id, name, selected, required, ...rest } = Astro.props;
+const priceLabel = (price: number | null, note: string) => (price ? `${formatPrice(price)} грн/т` : note || 'за запитом');
+---
+
+<select class="input" id={id} name={name} required={required} data-enhance {...rest}>
+  {
+    catalog.categories.map((c) => (
+      <optgroup label={c.label}>
+        {products
+          .filter((p) => p.category === c.id)
+          .map((p) => (
+            <option
+              value={p.id}
+              selected={p.id === selected}
+              data-name={p.name}
+              data-fraction={p.fraction}
+              data-price={priceLabel(p.price, p.priceNote)}
+              data-ask={p.price ? undefined : ''}
+            >
+              {productTitle(p)} — {priceLabel(p.price, p.priceNote)}
+            </option>
+          ))}
+      </optgroup>
+    ))
+  }
+</select>

@@ -1,0 +1,152 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../lib/data';
+---
+
+<div class="mapblock" data-reveal>
+  <div class="mapblock__map" data-map data-lat={site.geo.lat} data-lng={site.geo.lng} data-label={site.geo.label} data-route={site.geo.mapsUrl} role="region" aria-label="Карта: розташування кар’єру">
+    <p class="mapblock__fallback muted">Завантаження карти…</p>
+  </div>
+  <div class="mapblock__bar">
+    <div>
+      <p class="field__label">Як нас знайти</p>
+      <p>{site.geo.label}, {site.addresses[1].text}</p>
+    </div>
+    <a href={site.geo.mapsUrl} target="_blank" rel="noopener" class="btn btn--sm" data-magnetic>
+      <span class="btn__label"><span>Прокласти маршрут</span><span aria-hidden="true">Прокласти маршрут</span></span>
+      <Icon name="route" />
+    </a>
+  </div>
+</div>
+
+<style>
+  .mapblock {
+    margin-top: clamp(40px, 6vw, 80px);
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--line);
+  }
+
+  .mapblock__map {
+    position: relative;
+    height: clamp(320px, 48vw, 560px);
+    background: #1a1a18;
+  }
+
+  .mapblock__fallback {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+  }
+
+  .mapblock__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 20px 24px;
+    background: var(--bg-2);
+    border-top: 1px solid var(--line);
+  }
+
+  .mapblock__bar .field__label {
+    margin-bottom: 4px;
+  }
+
+  .mapblock :global(.leaflet-tile-pane) {
+    filter: grayscale(1) invert(1) brightness(0.82) contrast(0.92) sepia(0.12);
+  }
+
+  .mapblock :global(.leaflet-container) {
+    background: #1a1a18;
+    font-family: var(--font-body);
+  }
+
+  .mapblock :global(.leaflet-control-attribution) {
+    background: rgba(13, 13, 12, 0.7);
+    color: var(--muted);
+  }
+
+  .mapblock :global(.leaflet-control-attribution a) {
+    color: var(--text-2);
+  }
+
+  .mapblock :global(.leaflet-bar a) {
+    background: var(--bg-2);
+    color: var(--text);
+    border-color: var(--line);
+  }
+
+  .mapblock :global(.map-pin) {
+    position: relative;
+  }
+
+  .mapblock :global(.map-pin__dot) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 18px;
+    height: 18px;
+    margin: -9px 0 0 -9px;
+    border-radius: 50%;
+    background: var(--accent);
+    box-shadow: 0 0 0 4px rgba(251, 128, 7, 0.3);
+  }
+
+  .mapblock :global(.map-pin__wave) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 80px;
+    height: 80px;
+    margin: -40px 0 0 -40px;
+    border-radius: 50%;
+    border: 1px solid var(--accent);
+    animation: map-wave 2.4s var(--ease) infinite;
+  }
+
+  .mapblock :global(.map-pin__label) {
+    position: absolute;
+    left: 22px;
+    top: -12px;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: var(--bg);
+    color: var(--text);
+    font-size: 0.8rem;
+    font-weight: 600;
+    white-space: nowrap;
+    border: 1px solid var(--line-2);
+  }
+
+  .mapblock :global(.map-hint) {
+    position: absolute;
+    inset: 0;
+    z-index: 500;
+    display: grid;
+    place-items: center;
+    background: rgba(13, 13, 12, 0.5);
+    color: var(--text);
+    font-size: 0.9rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+
+  .mapblock :global(.map-hint.is-visible) {
+    opacity: 1;
+  }
+
+  @keyframes map-wave {
+    from {
+      transform: scale(0.2);
+      opacity: 1;
+    }
+    to {
+      transform: scale(1);
+      opacity: 0;
+    }
+  }
+</style>

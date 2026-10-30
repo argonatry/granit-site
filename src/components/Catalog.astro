@@ -1,0 +1,288 @@
+---
+import ProductCard from './ProductCard.astro';
+import Picture from './Picture.astro';
+import DocButton from './DocButton.astro';
+import Icon from './Icon.astro';
+import { catalog, products, productTitle } from '../lib/data';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  table?: boolean;
+}
+
+const { table = false } = Astro.props;
+const count = (id: string) => products.filter((p) => p.category === id).length;
+---
+
+<div class="catalog" data-catalog>
+  <div class="catalog__bar">
+    <div class="catalog__filters" role="group" aria-label="Фільтр за типом продукції">
+      <button type="button" class="chip" aria-pressed="true" data-filter="all">Усі <span class="chip__count">{products.length}</span></button>
+      {
+        catalog.categories.map((c) => (
+          <button type="button" class="chip" aria-pressed="false" data-filter={c.id}>
+            {c.label} <span class="chip__count">{count(c.id)}</span>
+          </button>
+        ))
+      }
+    </div>
+    {
+      table && (
+        <div class="catalog__views" role="group" aria-label="Вигляд каталогу">
+          <button type="button" class="catalog__view" aria-pressed="true" data-view="cards" aria-label="Картки">
+            <Icon name="grid" />
+          </button>
+          <button type="button" class="catalog__view" aria-pressed="false" data-view="table" aria-label="Таблиця">
+            <Icon name="list" />
+          </button>
+        </div>
+      )
+    }
+  </div>
+
+  <div class="catalog__grid" data-catalog-grid>
+    {products.map((p) => <ProductCard product={p} />)}
+  </div>
+
+  {
+    table && (
+      <div class="catalog__table" data-catalog-table hidden>
+        <table>
+          <thead>
+            <tr>
+              <th scope="col">Продукція</th>
+              <th scope="col">Ціна, з ПДВ за тонну</th>
+              <th scope="col">Документи</th>
+              <th scope="col"><span class="sr-only">Замовити</span></th>
+            </tr>
+          </thead>
+          <tbody>
+            {products.map((p) => (
+              <tr data-product={p.id} data-category={p.category}>
+                <td>
+                  <div class="catalog__prod">
+                    <span class="catalog__thumb media tone">
+                      <Picture src={p.image} alt={p.alt} widths={[120]} sizes="56px" />
+                    </span>
+                    <span>
+                      <strong>{p.name}</strong>
+                      <span class="muted">фракція: {p.fraction}</span>
+                    </span>
+                  </div>
+                </td>
+                <td class="catalog__price">
+                  {p.price ? (
+                    <>
+                      <strong>{formatPrice(p.price)} грн</strong>
+                      {(p.priceNote || p.minOrder > 0) && (
+                        <span class="muted">
+                          {p.priceNote}
+                          {p.minOrder ? ` від ${formatPrice(p.minOrder)} т` : ''}
+                        </span>
+                      )}
+                    </>
+                  ) : (
+                    <strong class="muted">{p.priceNote || 'за запитом'}</strong>
+                  )}
+                </td>
+                <td>
+                  <div class="catalog__docs">
+                    <DocButton path={p.certificate} title={`Сертифікат — ${productTitle(p)}`} class="link-line">Сертифікат</DocButton>
+                    <DocButton path={p.passport} title={`Паспорт — ${productTitle(p)}`} class="link-line">Паспорт</DocButton>
+                  </div>
+                </td>
+                <td class="catalog__order">
+                  <button type="button" class="btn btn--sm" data-order={p.id}>
+                    <span class="btn__label"><span>Замовити</span><span aria-hidden="true">Замовити</span></span>
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    )
+  }
+</div>
+
+<style>
+  .catalog__bar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 32px;
+  }
+
+  .catalog__filters {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+    margin-inline: calc(var(--gutter) * -1);
+    padding-inline: var(--gutter);
+  }
+
+  .catalog__filters::-webkit-scrollbar {
+    display: none;
+  }
+
+  .catalog__filters .chip {
+    flex: none;
+  }
+
+  @media (min-width: 720px) {
+    .catalog__filters {
+      flex-wrap: wrap;
+      overflow: visible;
+      margin: 0;
+      padding: 0;
+    }
+  }
+
+  .catalog__views {
+    display: none;
+    gap: 4px;
+    padding: 4px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+  }
+
+  @media (min-width: 900px) {
+    .catalog__views {
+      display: flex;
+    }
+  }
+
+  .catalog__view {
+    display: grid;
+    place-items: center;
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    color: var(--muted);
+    transition: background 0.3s, color 0.3s;
+  }
+
+  .catalog__view[aria-pressed='true'] {
+    background: var(--text);
+    color: var(--bg);
+  }
+
+  .catalog__grid {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    gap: 14px;
+    grid-template-columns: 1fr;
+    align-content: start;
+    perspective: 1400px;
+  }
+
+  @media (min-width: 620px) {
+    .catalog__grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .catalog__grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+    }
+  }
+
+  @media (min-width: 1360px) {
+    .catalog__grid {
+      grid-template-columns: repeat(4, 1fr);
+    }
+  }
+
+  .catalog__grid :global([hidden]),
+  .catalog__table :global(tr[hidden]),
+  .catalog__table[hidden],
+  .catalog__grid[hidden] {
+    display: none;
+  }
+
+  .catalog__table {
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    overflow: hidden;
+  }
+
+  .catalog__table table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .catalog__table th {
+    padding: 18px 20px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    background: var(--bg-2);
+  }
+
+  .catalog__table td {
+    padding: 14px 20px;
+    border-top: 1px solid var(--line);
+    vertical-align: middle;
+  }
+
+  .catalog__table tbody tr {
+    transition: background 0.3s;
+  }
+
+  .catalog__table tbody tr:hover {
+    background: var(--bg-2);
+  }
+
+  .catalog__prod {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .catalog__prod > span:last-child {
+    display: grid;
+  }
+
+  .catalog__thumb {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    flex: none;
+  }
+
+  .catalog__price {
+    display: grid;
+    gap: 2px;
+  }
+
+  .catalog__price strong:not(.muted) {
+    font-family: var(--font-display);
+    font-weight: 500;
+    font-size: 1.15rem;
+    color: var(--accent);
+  }
+
+  .catalog__price span {
+    font-size: 0.8rem;
+  }
+
+  .catalog__docs {
+    display: flex;
+    gap: 18px;
+    font-size: 0.9rem;
+  }
+
+  .catalog__order {
+    text-align: right;
+  }
+</style>

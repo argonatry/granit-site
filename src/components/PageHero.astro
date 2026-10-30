@@ -1,0 +1,76 @@
+---
+import Picture from './Picture.astro';
+
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  image?: string;
+  alt?: string;
+}
+
+const { eyebrow, title, lead, image, alt = '' } = Astro.props;
+---
+
+<section class="phero">
+  <div class="container">
+    <nav class="phero__crumbs mono" aria-label="Хлібні крихти">
+      <a href="/" class="link-line">Головна</a>
+      <span aria-hidden="true">/</span>
+      <span aria-current="page">{eyebrow}</span>
+    </nav>
+    <h1 class="phero__title display" data-split>{title}</h1>
+    {lead && <p class="phero__lead lead" data-reveal>{lead}</p>}
+    <slot />
+  </div>
+  {
+    image && (
+      <div class="phero__media media tone" data-reveal="mask" data-parallax-wrap>
+        <Picture src={image} alt={alt} loading="eager" widths={[640, 960, 1280]} sizes="100vw" />
+      </div>
+    )
+  }
+</section>
+
+<style>
+  .phero {
+    padding-top: calc(var(--header-h) + clamp(48px, 9vw, 120px));
+    padding-bottom: clamp(48px, 7vw, 96px);
+    background-image: radial-gradient(80% 60% at 85% 0%, rgba(251, 128, 7, 0.08), transparent 60%);
+  }
+
+  .phero .container {
+    display: grid;
+    gap: clamp(20px, 3vw, 32px);
+  }
+
+  .phero__crumbs {
+    display: flex;
+    gap: 10px;
+    color: var(--muted);
+  }
+
+  .phero__crumbs [aria-current] {
+    color: var(--accent);
+  }
+
+  .phero__title {
+    max-width: 16ch;
+    text-wrap: balance;
+  }
+
+  .phero__lead {
+    max-width: 62ch;
+  }
+
+  .phero__media {
+    height: clamp(260px, 52vw, 640px);
+    margin: clamp(40px, 6vw, 80px) var(--gutter) 0;
+    border-radius: clamp(16px, 2vw, 28px);
+  }
+
+  .phero__media :global(img) {
+    height: 120%;
+    margin-top: -10%;
+  }
+</style>

@@ -1,0 +1,124 @@
+---
+import '@fontsource-variable/unbounded';
+import '@fontsource-variable/onest';
+import '@fontsource/jetbrains-mono/400.css';
+import '../styles/global.css';
+import { getImage } from 'astro:assets';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import MobileBar from '../components/MobileBar.astro';
+import OrderDialog from '../components/OrderDialog.astro';
+import MediaDialogs from '../components/MediaDialogs.astro';
+import { img } from '../lib/images';
+import { site, products } from '../lib/data';
+import { organizationSchema, breadcrumbSchema } from '../lib/schema';
+
+interface Props {
+  title: string;
+  description: string;
+  ogImage?: string;
+  breadcrumb?: string;
+  schema?: object[];
+}
+
+const { title, description, ogImage = '/assets/images/quarry/hero-poster.jpg', breadcrumb, schema = [] } = Astro.props;
+const canonical = new URL(Astro.url.pathname, site.url).href;
+
+const og = await getImage({ src: img(ogImage), width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
+const logo = await getImage({ src: img('/assets/images/brand/logo-v2.png'), width: 600, format: 'png' });
+const icon = img('/assets/images/brand/icon-512.png');
+const favicon32 = await getImage({ src: icon, width: 32, height: 32, format: 'png' });
+const favicon192 = await getImage({ src: icon, width: 192, height: 192, format: 'png' });
+const apple = await getImage({ src: icon, width: 180, height: 180, format: 'png' });
+
+const ld = [
+  organizationSchema(logo.src, og.src),
+  ...(breadcrumb ? [breadcrumbSchema([{ name: 'Головна', path: '/' }, { name: breadcrumb, path: Astro.url.pathname }])] : []),
+  ...schema,
+];
+
+const catalogData = products.map((p) => ({
+  id: p.id,
+  title: `${p.name} ${p.fraction}`,
+  price: p.price,
+  priceNote: p.priceNote,
+  minOrder: p.minOrder,
+}));
+const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
+---
+
+<!doctype html>
+<html lang="uk">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta name="theme-color" content="#0d0d0c" />
+    <meta name="format-detection" content="telephone=no" />
+    <link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
+    <link rel="icon" type="image/png" sizes="192x192" href={favicon192.src} />
+    <link rel="apple-touch-icon" href={apple.src} />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content={site.name} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={new URL(og.src, site.url).href} />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={new URL(og.src, site.url).href} />
+
+    <script is:inline>
+      (function () {
+        var d = document.documentElement;
+        d.classList.add('js');
+        var reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var n = navigator;
+        var c = n.connection || {};
+        var weak = (n.hardwareConcurrency || 8) <= 4 || (n.deviceMemory || 8) <= 4 || c.saveData === true || /(^|-)2g$/.test(c.effectiveType || '');
+        if (reduced) d.classList.add('reduced');
+        if (weak || reduced) d.classList.add('lite');
+        try {
+          if (!sessionStorage.getItem('lk-visited') && !reduced) d.classList.add('first-visit');
+          sessionStorage.setItem('lk-visited', '1');
+        } catch (e) {}
+        setTimeout(function () {
+          if (!d.classList.contains('anim-ready')) d.classList.add('anim-fallback');
+        }, 4000);
+      })();
+    </script>
+
+    {ld.map((item) => <script type="application/ld+json" set:html={JSON.stringify(item)} />)}
+    {turnstileKey && <script src="https://challenges.cloudflare.com/turnstile/v0/api.js" async defer />}
+  </head>
+  <body>
+    <a href="#main" class="skip-link">Перейти до змісту</a>
+
+    <div class="preloader" data-preloader aria-hidden="true">
+      <span class="preloader__name">{site.name}</span>
+      <span class="preloader__count" data-preloader-count>0</span>
+    </div>
+
+    <Header />
+    <main id="main">
+      <slot />
+    </main>
+    <Footer />
+    <MobileBar />
+    <OrderDialog />
+    <MediaDialogs />
+
+    <script type="application/json" id="catalog-data" set:html={JSON.stringify(catalogData)} />
+    <script>
+      import '../scripts/main';
+    </script>
+  </body>
+</html>

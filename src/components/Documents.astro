@@ -1,0 +1,127 @@
+---
+import Picture from './Picture.astro';
+import Icon from './Icon.astro';
+import { documents } from '../lib/data';
+import { large } from '../lib/images';
+
+interface Props {
+  limit?: number;
+}
+
+const { limit } = Astro.props;
+const list = limit ? documents.certificates.slice(0, limit) : documents.certificates;
+const certs = await Promise.all(list.map(async (c) => ({ ...c, big: await large(c.image, 2000) })));
+---
+
+<div class="docs">
+  <ul class="docs__grid" data-pswp-gallery>
+    {
+      certs.map((c) => (
+        <li class="docs__item" data-reveal>
+          <a
+            href={c.big.src}
+            class="docs__card"
+            data-pswp-width={c.big.width}
+            data-pswp-height={c.big.height}
+            data-pswp-caption={c.title}
+          >
+            <span class="docs__paper media">
+              <Picture src={c.image} alt={c.title} widths={[360, 640]} sizes="(min-width: 1100px) 22vw, (min-width: 620px) 45vw, 90vw" />
+            </span>
+            <span class="docs__title">{c.title}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <ul class="docs__files">
+    {
+      documents.files.map((f) => (
+        <li data-reveal>
+          <a href={f.file} class="docs__file" data-pdf={f.file} data-pdf-title={f.title} target="_blank" rel="noopener">
+            <Icon name="file" />
+            <span>{f.title}</span>
+            <span class="mono muted">PDF</span>
+            <Icon name="arrow" class="icon docs__arrow" />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<style>
+  .docs {
+    display: grid;
+    gap: clamp(40px, 5vw, 64px);
+  }
+
+  .docs__grid {
+    display: grid;
+    gap: 16px;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  }
+
+  .docs__card {
+    display: grid;
+    gap: 14px;
+  }
+
+  .docs__paper {
+    aspect-ratio: 210 / 297;
+    border-radius: 12px;
+    background: #f1eee8;
+    padding: 0;
+    box-shadow: 0 20px 60px -30px rgba(0, 0, 0, 0.6);
+    transition: transform 0.8s var(--ease), box-shadow 0.8s var(--ease);
+  }
+
+  .docs__paper :global(img) {
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .docs__card:hover .docs__paper {
+    transform: translateY(-8px) rotate(-1deg);
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.7);
+  }
+
+  .docs__title {
+    font-size: 0.92rem;
+    line-height: 1.4;
+  }
+
+  .docs__files {
+    display: grid;
+    border-top: 1px solid var(--line);
+  }
+
+  .docs__file {
+    display: grid;
+    grid-template-columns: auto 1fr auto auto;
+    align-items: center;
+    gap: 18px;
+    padding: 22px 4px;
+    border-bottom: 1px solid var(--line);
+    font-size: clamp(1rem, 1.4vw, 1.25rem);
+    transition: padding 0.5s var(--ease), color 0.3s;
+  }
+
+  .docs__file > :global(.icon:first-child) {
+    color: var(--accent);
+  }
+
+  .docs__file:hover {
+    padding-left: 16px;
+    color: var(--accent);
+  }
+
+  .docs__file :global(.docs__arrow) {
+    transition: transform 0.5s var(--ease);
+  }
+
+  .docs__file:hover :global(.docs__arrow) {
+    transform: rotate(-45deg);
+  }
+</style>

@@ -1,0 +1,125 @@
+---
+import Picture from './Picture.astro';
+
+const items = [
+  {
+    title: 'Щебінь гранітний 5-10 мм та 10-20 мм',
+    sub: 'Найпопулярніші «дрібні» фракції для професійного будівництва',
+    list: ['Виробництво бетону та залізобетонних конструкцій (ЗБВ)', 'Заливання мостових конструкцій та дорожнього полотна', 'Облаштування верхніх шарів дорожнього покриття'],
+    image: '/assets/images/usage/beton-zbv.png',
+    alt: 'Щебінь 5-10 та 10-20 мм для виробництва бетону та ЗБВ',
+  },
+  {
+    title: 'Щебінь фракції 5-20 мм (суміш)',
+    sub: 'Універсальний матеріал, що поєднує переваги двох попередніх типів',
+    list: ['Вибір для приватного будівництва', 'Заливки фундаментів будинків', 'Створення надійних стяжок'],
+    image: '/assets/images/usage/fundament.jpg',
+    alt: 'Щебінь 5-20 мм для фундаменту будинку',
+  },
+  {
+    title: 'Щебінь фракції 20-40 мм',
+    sub: 'Середня фракція, яка має високий попит у промисловому масштабі',
+    list: ['Будівництво залізничних насипів', 'Створення «подушок» під фундаменти будівель', 'Будівництво автодоріг з високим навантаженням'],
+    image: '/assets/images/usage/zaliznychni-nasypy.jpg',
+    alt: 'Щебінь 20-40 мм для залізничних насипів',
+  },
+  {
+    title: 'Щебінь фракції 40-70 мм',
+    sub: 'Велика фракція (бутовий камінь), що застосовується для:',
+    list: ['Роботи з великими обсягами бетону', 'Укріплення берегових ліній та слабких ґрунтів', 'Ландшафтний дизайн (декорування габіонів, підпірних стін)'],
+    image: '/assets/images/usage/landshaft.jpg',
+    alt: 'Щебінь 40-70 мм у ландшафтному дизайні',
+  },
+];
+---
+
+<div class="usage">
+  {
+    items.map((item, i) => (
+      <article class="usage__item">
+        <div class="usage__media media tone" data-reveal="mask">
+          <Picture src={item.image} alt={item.alt} widths={[480, 800, 1138]} sizes="(min-width: 960px) 45vw, 100vw" />
+        </div>
+        <div class="usage__text">
+          <span class="usage__num" aria-hidden="true">0{i + 1}</span>
+          <h3 class="h3" data-reveal>{item.title}</h3>
+          <p class="lead" data-reveal>{item.sub}</p>
+          <ul class="usage__list">
+            {item.list.map((li) => (
+              <li data-reveal>{li}</li>
+            ))}
+          </ul>
+        </div>
+      </article>
+    ))
+  }
+</div>
+
+<style>
+  .usage {
+    display: grid;
+    gap: clamp(64px, 10vw, 140px);
+  }
+
+  .usage__item {
+    display: grid;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .usage__media {
+    aspect-ratio: 4 / 3;
+    border-radius: var(--radius);
+  }
+
+  .usage__text {
+    position: relative;
+    display: grid;
+    gap: 18px;
+    align-content: center;
+  }
+
+  .usage__num {
+    font-family: var(--font-display);
+    font-size: clamp(3.4rem, 8vw, 7rem);
+    font-weight: 600;
+    line-height: 0.9;
+    letter-spacing: -0.05em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .usage__list {
+    display: grid;
+    margin-top: 8px;
+    border-top: 1px solid var(--line);
+  }
+
+  .usage__list li {
+    display: flex;
+    gap: 14px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .usage__list li::before {
+    content: '';
+    flex: none;
+    width: 8px;
+    height: 8px;
+    margin-top: 0.6em;
+    background: var(--accent);
+    rotate: 45deg;
+  }
+
+  @media (min-width: 960px) {
+    .usage__item {
+      grid-template-columns: 1.1fr 1fr;
+      gap: clamp(48px, 7vw, 120px);
+    }
+
+    .usage__item:nth-child(even) .usage__media {
+      order: 2;
+    }
+  }
+</style>

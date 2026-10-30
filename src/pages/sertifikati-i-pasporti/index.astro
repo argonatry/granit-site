@@ -1,0 +1,96 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Documents from '../../components/Documents.astro';
+import Specs from '../../components/Specs.astro';
+import Contacts from '../../components/Contacts.astro';
+import Button from '../../components/Button.astro';
+---
+
+<Base
+  title="Сертифікати та паспорти якості — ТОВ «Любимівський кар’єр»"
+  description="Офіційні сертифікати відповідності, радіаційні паспорти та протоколи випробувань щебеню, відсіву та бутового каменю від ТОВ «Любимівський кар'єр». Гарантія якості ДСТУ."
+  breadcrumb="Документи"
+  ogImage="/assets/images/docs/sertyfikat-vidpovidnosti-shchebin-granitnyi.jpg"
+>
+  <PageHero
+    eyebrow="Документи"
+    title="Сертифікати і паспорти"
+    lead="ТОВ «Любимівський кар'єр» реалізує високоякісну нерудну продукцію, яка відповідає найсуворішим державним стандартам та будівельним нормам України. У цьому розділі ви можете ознайомитися з офіційною документацією, що підтверджує фізико-механічні властивості та безпеку наших матеріалів."
+  />
+
+  <section class="section section--tight" aria-labelledby="files-title">
+    <div class="container">
+      <h2 class="sr-only" id="files-title">Документи</h2>
+      <Documents />
+    </div>
+  </section>
+
+  <section class="section section--light" aria-labelledby="quality-title">
+    <div class="container quality">
+      <div class="quality__text">
+        <p class="eyebrow">Контроль якості</p>
+        <h2 class="h2" id="quality-title" data-split>Гарантія якості нашої продукції</h2>
+        <p class="lead" data-reveal>Ми розуміємо, що міцність фундаменту, надійність дорожнього покриття та довговічність залізобетонних конструкцій безпосередньо залежать від якості сировини. Саме тому кожна партія щебеню, відсіву чи бутового каменю проходить ретельний лабораторний контроль.</p>
+        <p data-reveal>Ми надаємо повний пакет документів на кожне замовлення:</p>
+        <ul class="quality__list">
+          <li data-reveal><strong>Паспорти якості</strong> — містять результати випробувань конкретної партії.</li>
+          <li data-reveal><strong>Сертифікати відповідності</strong> — підтверджують відповідність вимогам ДСТУ.</li>
+          <li data-reveal><strong>Радіаційні сертифікати</strong> — доводять безпеку матеріалів (1-й клас безпеки).</li>
+        </ul>
+      </div>
+      <div class="quality__specs">
+        <h3 class="h3">Технічні характеристики згідно з ДСТУ</h3>
+        <Specs />
+        <p class="quality__note" data-reveal><strong>Зверніть увагу:</strong> Ми регулярно оновлюємо документацію відповідно до термінів дії сертифікатів та результатів нових лабораторних досліджень.</p>
+        <p class="muted" data-reveal>Наші фахівці допоможуть підібрати фракцію під ваші потреби та нададуть усі необхідні виписки з реєстрів.</p>
+        <div data-reveal><Button href="#contacts" variant="dark">Зв'яжіться з нами прямо зараз!</Button></div>
+      </div>
+    </div>
+  </section>
+
+  <Contacts />
+</Base>
+
+<style>
+  .quality {
+    display: grid;
+    gap: 56px;
+  }
+
+  .quality__text,
+  .quality__specs {
+    display: grid;
+    gap: 22px;
+    align-content: start;
+    justify-items: start;
+  }
+
+  .quality__specs :global(.specs) {
+    width: 100%;
+  }
+
+  .quality__list {
+    display: grid;
+    width: 100%;
+    border-top: 1px solid var(--line);
+  }
+
+  .quality__list li {
+    padding: 16px 0;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .quality__note {
+    padding: 18px 20px;
+    border-left: 3px solid var(--accent);
+    background: var(--bg-2);
+  }
+
+  @media (min-width: 1024px) {
+    .quality {
+      grid-template-columns: 1fr 1.1fr;
+      gap: clamp(56px, 7vw, 120px);
+    }
+  }
+</style>

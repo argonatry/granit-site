@@ -1,0 +1,114 @@
+---
+import Icon from './Icon.astro';
+import { site } from '../lib/data';
+---
+
+<nav class="mobilebar" aria-label="Швидкий зв'язок">
+  <a href={`tel:${site.phones[0].tel}`} class="mobilebar__item"><Icon name="phone" /><span>Подзвонити</span></a>
+  <a href={site.messengers.viber} class="mobilebar__item"><Icon name="viber" /><span>Viber</span></a>
+  <a href={site.messengers.telegram} class="mobilebar__item" target="_blank" rel="noopener"><Icon name="telegram" /><span>Telegram</span></a>
+  <button type="button" class="mobilebar__item mobilebar__order" data-order><Icon name="arrow" /><span>Замовити</span></button>
+</nav>
+
+<button type="button" class="totop" data-totop aria-label="Нагору">
+  <svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="22" pathLength="100" data-totop-ring /></svg>
+  <Icon name="arrow-up" />
+</button>
+
+<style>
+  .mobilebar {
+    position: fixed;
+    left: 10px;
+    right: 10px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    z-index: 95;
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 4px;
+    padding: 6px;
+    border-radius: 20px;
+    border: 1px solid var(--line);
+    background: rgba(20, 20, 19, 0.86);
+    backdrop-filter: blur(16px);
+    transition: transform 0.5s var(--ease);
+  }
+
+  :global(.menu-open) .mobilebar {
+    transform: translateY(160%);
+  }
+
+  .mobilebar__item {
+    display: grid;
+    justify-items: center;
+    gap: 3px;
+    padding: 8px 2px;
+    border-radius: 14px;
+    font-size: 0.7rem;
+    color: var(--text-2);
+  }
+
+  .mobilebar__item:active {
+    background: var(--bg-3);
+  }
+
+  .mobilebar__order {
+    background: var(--accent);
+    color: var(--accent-ink);
+    font-weight: 600;
+  }
+
+  .mobilebar__order:active {
+    background: var(--accent-2);
+  }
+
+  .totop {
+    position: fixed;
+    right: 20px;
+    bottom: calc(96px + env(safe-area-inset-bottom));
+    z-index: 94;
+    display: grid;
+    place-items: center;
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    background: var(--bg-2);
+    border: 1px solid var(--line);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(12px);
+    transition: opacity 0.4s, visibility 0.4s, transform 0.4s var(--ease);
+  }
+
+  .totop.is-visible {
+    opacity: 1;
+    visibility: visible;
+    transform: none;
+  }
+
+  .totop svg {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    rotate: -90deg;
+  }
+
+  .totop circle {
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 2;
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+  }
+
+  @media (min-width: 900px) {
+    .mobilebar {
+      display: none;
+    }
+
+    .totop {
+      bottom: 28px;
+      right: 28px;
+    }
+  }
+</style>

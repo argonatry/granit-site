@@ -1,0 +1,195 @@
+media:
+  - name: images
+    label: Фото
+    input: assets/images
+    output: /assets/images
+    extensions: [jpg, jpeg, png]
+  - name: docs
+    label: PDF-документи
+    input: public/docs
+    output: /docs
+    extensions: [pdf]
+
+content:
+  - name: products
+    label: Продукція та ціни
+    type: file
+    path: src/data/products.json
+    format: json
+    fields:
+      - name: priceList
+        label: Прайс-лист
+        type: object
+        fields:
+          - { name: label, label: Напис на кнопці, type: string, required: true }
+          - { name: file, label: PDF прайсу, type: file, options: { media: docs } }
+      - name: categories
+        label: Категорії фільтра
+        type: object
+        list: true
+        fields:
+          - { name: id, label: Код (латиницею), type: string, required: true }
+          - { name: label, label: Назва, type: string, required: true }
+      - name: products
+        label: Продукція
+        type: object
+        list: true
+        fields:
+          - { name: id, label: 'Код (латиницею, унікальний)', type: string, required: true }
+          - name: category
+            label: Категорія
+            type: select
+            required: true
+            options:
+              values:
+                - { value: shchebin, label: Щебінь }
+                - { value: vidsiv, label: Відсів }
+                - { value: shchps, label: ЩПС }
+                - { value: inshe, label: Бут і суглинок }
+          - { name: name, label: Назва, type: string, required: true }
+          - { name: fraction, label: Фракція, type: string, required: true }
+          - { name: use, label: Застосування, type: text }
+          - { name: price, label: 'Ціна за тонну з ПДВ, грн (порожньо — «телефонуйте»)', type: number }
+          - name: priceNote
+            label: Примітка до ціни
+            type: select
+            options:
+              values:
+                - { value: '', label: — }
+                - { value: на замовлення, label: на замовлення }
+                - { value: телефонуйте, label: телефонуйте }
+          - { name: minOrder, label: 'Мінімальне замовлення, т (0 — без обмежень)', type: number }
+          - { name: image, label: Фото, type: image, options: { media: images, path: assets/images/products } }
+          - { name: alt, label: Опис фото для SEO, type: string }
+          - { name: certificate, label: Сертифікат (зображення), type: image, options: { media: images, path: assets/images/docs } }
+          - { name: passport, label: Паспорт (зображення), type: image, options: { media: images, path: assets/images/docs } }
+
+  - name: site
+    label: Контакти та компанія
+    type: file
+    path: src/data/site.json
+    format: json
+    fields:
+      - { name: name, label: Назва, type: string }
+      - { name: shortName, label: Коротка назва, type: string }
+      - { name: legalName, label: Повна юридична назва, type: string }
+      - { name: edrpou, label: ЄДРПОУ, type: string }
+      - { name: foundedYear, label: Рік початку роботи, type: number }
+      - { name: url, label: Адреса сайту, type: string }
+      - name: phones
+        label: Телефони
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Як показувати, type: string }
+          - { name: tel, label: Для дзвінка (+380...), type: string }
+      - { name: email, label: Email, type: string }
+      - name: messengers
+        label: Месенджери
+        type: object
+        fields:
+          - { name: viber, label: Viber-посилання, type: string }
+          - { name: telegram, label: Telegram-посилання, type: string }
+      - name: representative
+        label: Безготівковий розрахунок
+        type: object
+        fields:
+          - { name: title, label: Заголовок, type: string }
+          - { name: name, label: Представник, type: string }
+          - name: phone
+            label: Телефон
+            type: object
+            fields:
+              - { name: label, label: Як показувати, type: string }
+              - { name: tel, label: Для дзвінка (+380...), type: string }
+      - name: addresses
+        label: Адреси
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Заголовок, type: string }
+          - { name: text, label: Адреса, type: text }
+      - name: hours
+        label: Режим роботи
+        type: object
+        fields:
+          - { name: weekdays, label: Будні, type: string }
+          - { name: weekend, label: Вихідні, type: string }
+          - { name: opens, label: Відкриття (ГГ:ХХ), type: string }
+          - { name: closes, label: Закриття (ГГ:ХХ), type: string }
+      - name: postal
+        label: Поштова адреса для Google
+        type: object
+        fields:
+          - { name: street, label: Вулиця, type: string }
+          - { name: locality, label: Населений пункт, type: string }
+          - { name: region, label: Область, type: string }
+          - { name: code, label: Індекс, type: string }
+          - { name: country, label: Країна, type: string }
+      - name: geo
+        label: Карта
+        type: object
+        fields:
+          - { name: lat, label: Широта, type: number }
+          - { name: lng, label: Довгота, type: number }
+          - { name: label, label: Підпис на мітці, type: string }
+          - { name: mapsUrl, label: Посилання «Прокласти маршрут», type: string }
+      - { name: slogans, label: Слогани на першому екрані, type: string, list: true }
+      - name: stats
+        label: Цифри
+        type: object
+        list: true
+        fields:
+          - { name: value, label: Число, type: number }
+          - { name: prefix, label: Перед числом, type: string }
+          - { name: suffix, label: Після числа, type: string }
+          - { name: label, label: Підпис, type: string }
+      - name: advantages
+        label: Переваги
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Заголовок, type: string }
+          - { name: text, label: Текст, type: text }
+
+  - name: documents
+    label: Документи
+    type: file
+    path: src/data/documents.json
+    format: json
+    fields:
+      - name: certificates
+        label: Сертифікати (зображення)
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Назва, type: string }
+          - { name: image, label: Скан, type: image, options: { media: images, path: assets/images/docs } }
+      - name: files
+        label: PDF-документи
+        type: object
+        list: true
+        fields:
+          - { name: title, label: Назва, type: string }
+          - { name: file, label: PDF, type: file, options: { media: docs } }
+      - name: specs
+        label: Технічні характеристики
+        type: object
+        list: true
+        fields:
+          - { name: label, label: Показник, type: string }
+          - { name: value, label: Значення, type: string, list: true }
+
+  - name: gallery
+    label: Фотогалерея
+    type: file
+    path: src/data/gallery.json
+    format: json
+    fields:
+      - name: items
+        label: Фото
+        type: object
+        list: true
+        fields:
+          - { name: image, label: Фото, type: image, options: { media: images, path: assets/images/quarry } }
+          - { name: caption, label: Підпис, type: string }

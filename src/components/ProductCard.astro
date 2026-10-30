@@ -1,0 +1,275 @@
+---
+import Picture from './Picture.astro';
+import Button from './Button.astro';
+import DocButton from './DocButton.astro';
+import Icon from './Icon.astro';
+import { categoryLabel, productTitle, type Product } from '../lib/data';
+import { formatPrice } from '../lib/format';
+
+interface Props {
+  product: Product;
+}
+
+const { product: p } = Astro.props;
+const big = p.fraction.match(/^[\d–-]+/)?.[0] ?? '';
+---
+
+<article class="pcard" data-product={p.id} data-category={p.category} data-tilt data-reveal>
+  <span class="pcard__spot" aria-hidden="true"></span>
+  {big && <span class="pcard__bg" aria-hidden="true">{big}</span>}
+
+  <div class="pcard__img media tone">
+    <Picture src={p.image} alt={p.alt} widths={[300]} sizes="300px" />
+  </div>
+
+  <div class="pcard__body">
+    <p class="mono muted">{categoryLabel(p.category)}</p>
+    <h3 class="pcard__name">{p.name}</h3>
+    <p class:list={['pcard__frac', { 'pcard__frac--text': !big }]}>{p.fraction}</p>
+    <p class="pcard__use muted">{p.use}</p>
+  </div>
+
+  <div class="pcard__foot">
+    <div class="pcard__price">
+      {
+        p.price ? (
+          <>
+            <strong>{formatPrice(p.price)}<small> грн</small></strong>
+            <span class="muted">за тонну з ПДВ{p.priceNote ? ` · ${p.priceNote}` : ''}{p.minOrder ? ` · від ${formatPrice(p.minOrder)} т` : ''}</span>
+          </>
+        ) : (
+          <>
+            <strong class="pcard__ask">{p.priceNote || 'ціна за запитом'}</strong>
+            <span class="muted">ціну уточнюйте у менеджера</span>
+          </>
+        )
+      }
+    </div>
+    <div class="pcard__actions">
+      <Button size="sm" data-order={p.id} aria-label={`Замовити: ${productTitle(p)}`}>Замовити</Button>
+      <DocButton path={p.certificate} title={`Сертифікат — ${productTitle(p)}`} class="pcard__doc"><Icon name="shield" />Сертифікат</DocButton>
+      <DocButton path={p.passport} title={`Паспорт — ${productTitle(p)}`} class="pcard__doc"><Icon name="doc" />Паспорт</DocButton>
+    </div>
+  </div>
+</article>
+
+<style>
+  .pcard {
+    --mx: 50%;
+    --my: 50%;
+    position: relative;
+    display: grid;
+    grid-template-rows: auto 1fr auto;
+    gap: 20px;
+    padding: 18px;
+    border-radius: var(--radius);
+    border: 1px solid var(--line);
+    background: linear-gradient(180deg, var(--bg-3), var(--bg-2));
+    overflow: hidden;
+    isolation: isolate;
+    transform-style: preserve-3d;
+    transition: border-color 0.4s;
+  }
+
+  .pcard:hover {
+    border-color: color-mix(in srgb, var(--accent) 45%, transparent);
+  }
+
+  .pcard__spot {
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: radial-gradient(420px circle at var(--mx) var(--my), color-mix(in srgb, var(--accent) 16%, transparent), transparent 60%);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+
+  .pcard:hover .pcard__spot {
+    opacity: 1;
+  }
+
+  .pcard__bg {
+    position: absolute;
+    right: -0.06em;
+    top: 0.1em;
+    z-index: -1;
+    font-family: var(--font-display);
+    font-size: clamp(5rem, 9vw, 7.5rem);
+    font-weight: 700;
+    line-height: 1;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--line);
+    pointer-events: none;
+  }
+
+  .pcard__img {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    border-radius: 12px;
+  }
+
+  .pcard__img :global(img) {
+    transform: scale(1.02);
+    transition: transform 1.1s var(--ease);
+  }
+
+  .pcard:hover .pcard__img :global(img) {
+    transform: scale(1.12);
+  }
+
+  .pcard__body {
+    display: grid;
+    gap: 6px;
+    align-content: start;
+  }
+
+  .pcard__name {
+    font-family: var(--font-display);
+    font-size: 1.12rem;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+
+  .pcard__frac {
+    font-family: var(--font-display);
+    font-size: 1.7rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    color: var(--accent);
+  }
+
+  .pcard__frac--text {
+    font-size: 1.15rem;
+    letter-spacing: -0.01em;
+  }
+
+  .pcard__use {
+    font-size: 0.9rem;
+    line-height: 1.5;
+  }
+
+  .pcard__foot {
+    display: grid;
+    gap: 16px;
+    padding-top: 16px;
+    border-top: 1px solid var(--line);
+  }
+
+  .pcard__price {
+    display: grid;
+    gap: 2px;
+  }
+
+  .pcard__price strong {
+    font-family: var(--font-display);
+    font-size: 1.9rem;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .pcard__price small {
+    font-size: 0.55em;
+    font-weight: 400;
+    color: var(--text-2);
+  }
+
+  .pcard__price strong.pcard__ask {
+    font-size: 1.35rem;
+    text-transform: lowercase;
+  }
+
+  .pcard__price span {
+    font-size: 0.8rem;
+  }
+
+  .pcard__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .pcard__actions :global(.btn) {
+    flex: 1 0 100%;
+  }
+
+  @media (max-width: 619px) {
+    .pcard {
+      grid-template-columns: 104px 1fr;
+      grid-template-rows: auto auto;
+      gap: 14px 16px;
+      padding: 14px;
+    }
+
+    .pcard__img {
+      aspect-ratio: 1;
+      align-self: start;
+    }
+
+    .pcard__foot {
+      grid-column: 1 / -1;
+      padding-top: 14px;
+      gap: 12px;
+    }
+
+    .pcard__frac {
+      font-size: 1.35rem;
+    }
+
+    .pcard__frac--text {
+      font-size: 1rem;
+    }
+
+    .pcard__name {
+      font-size: 1rem;
+      margin-top: 0;
+    }
+
+    .pcard__use {
+      font-size: 0.82rem;
+    }
+
+    .pcard__bg {
+      font-size: 4rem;
+    }
+
+    .pcard__price {
+      grid-template-columns: auto 1fr;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .pcard__price strong {
+      font-size: 1.5rem;
+    }
+  }
+
+  .pcard__actions :global(.pcard__doc) {
+    display: inline-flex;
+    flex: 1;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    min-height: 40px;
+    padding: 0 12px;
+    border-radius: 999px;
+    border: 1px solid var(--line-2);
+    font-size: 0.8rem;
+    color: var(--text-2);
+    transition: border-color 0.3s, color 0.3s;
+  }
+
+  .pcard__actions :global(.pcard__doc:hover) {
+    border-color: var(--text);
+    color: var(--text);
+  }
+
+  .pcard__actions :global(.pcard__doc .icon) {
+    width: 16px;
+    height: 16px;
+  }
+</style>

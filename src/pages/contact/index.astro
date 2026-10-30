@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Contacts from '../../components/Contacts.astro';
+import { site } from '../../lib/data';
+---
+
+<Base
+  title="Контакти — ТОВ «Любимівський кар’єр», Дніпро, с. Любимівка"
+  description={`Телефони ${site.phones.map((p) => p.label).join(', ')}, email ${site.email}. Адреса виробництва: Дніпровський район, с. Любимівка. Режим роботи: Пн-Пт 08:30–17:30.`}
+  breadcrumb="Контакти"
+>
+  <PageHero eyebrow="Контакти" title="Контакти" lead="Юридична адреса, адреса виробництва, телефони та карта проїзду до кар’єру." />
+  <Contacts map title="Зв’яжіться з нами" />
+</Base>

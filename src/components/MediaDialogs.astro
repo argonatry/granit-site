@@ -1,0 +1,150 @@
+---
+import Icon from './Icon.astro';
+import { img } from '../lib/images';
+import { getImage } from 'astro:assets';
+
+const poster = await getImage({ src: img('/assets/images/quarry/video-poster.jpg'), width: 1280, format: 'webp' });
+---
+
+<dialog class="dialog pdf" id="pdf-dialog" aria-labelledby="pdf-title" data-pdf-dialog>
+  <div class="pdf__bar">
+    <p class="pdf__title" id="pdf-title" data-pdf-heading>Документ</p>
+    <div class="pdf__actions">
+      <a class="pdf__action" href="#" target="_blank" rel="noopener" data-pdf-open><Icon name="eye" /><span>Відкрити</span></a>
+      <a class="pdf__action" href="#" download data-pdf-download><Icon name="download" /><span>Завантажити</span></a>
+      <button class="pdf__action pdf__close" type="button" data-dialog-close aria-label="Закрити"><Icon name="close" /></button>
+    </div>
+  </div>
+  <div class="pdf__viewport" data-pdf-viewport>
+    <div class="pdf__pages" data-pdf-pages></div>
+    <p class="pdf__state muted" data-pdf-state>Завантаження документа…</p>
+  </div>
+</dialog>
+
+<dialog class="dialog video" id="video-dialog" aria-label="Відео: кар’єр з висоти" data-video-dialog>
+  <button class="dialog__close" type="button" data-dialog-close aria-label="Закрити"><Icon name="close" /></button>
+  <video controls playsinline preload="none" poster={poster.src} data-video-full>
+    <source data-src="/video/karyer-z-vysoty.mp4" type="video/mp4" />
+  </video>
+</dialog>
+
+<style>
+  .pdf {
+    width: min(1100px, calc(100vw - 16px));
+    height: calc(100dvh - 16px);
+    max-height: none;
+    display: none;
+    flex-direction: column;
+    overflow: hidden;
+  }
+
+  .pdf[open] {
+    display: flex;
+  }
+
+  .pdf__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 12px 22px;
+    border-bottom: 1px solid var(--line);
+    background: var(--bg-2);
+  }
+
+  .pdf__title {
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .pdf__actions {
+    display: flex;
+    gap: 6px;
+    flex: none;
+  }
+
+  .pdf__action {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line-2);
+    font-size: 0.85rem;
+    transition: border-color 0.3s, background 0.3s;
+  }
+
+  .pdf__action:hover {
+    border-color: var(--text);
+  }
+
+  .pdf__close {
+    width: 42px;
+    padding: 0;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .pdf__action span {
+      display: none;
+    }
+
+    .pdf__action {
+      width: 42px;
+      padding: 0;
+      justify-content: center;
+    }
+  }
+
+  .pdf__viewport {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+    overscroll-behavior: contain;
+    background: #2a2926;
+    padding: 16px;
+  }
+
+  .pdf__pages {
+    display: grid;
+    gap: 16px;
+    justify-items: center;
+  }
+
+  .pdf__pages :global(canvas) {
+    width: 100%;
+    max-width: 980px;
+    height: auto;
+    background: #fff;
+    border-radius: 4px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.4);
+  }
+
+  .pdf__state {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    padding: 24px;
+  }
+
+  .pdf__state:empty {
+    display: none;
+  }
+
+  .video {
+    width: min(1200px, calc(100vw - 16px));
+    background: #000;
+    overflow: hidden;
+  }
+
+  .video video {
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    background: #000;
+  }
+</style>

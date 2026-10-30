@@ -1,0 +1,93 @@
+---
+import { documents } from '../lib/data';
+---
+
+<div class="specs">
+  <table>
+    <caption class="sr-only">Технічні характеристики згідно з ДСТУ</caption>
+    <thead>
+      <tr>
+        <th scope="col">Показник</th>
+        <th scope="col">Значення (типові)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {
+        documents.specs.map((s) => (
+          <tr data-reveal>
+            <th scope="row">{s.label}</th>
+            <td>
+              {s.value.map((v) => (
+                <span>{v}</span>
+              ))}
+            </td>
+          </tr>
+        ))
+      }
+    </tbody>
+  </table>
+</div>
+
+<style>
+  .specs table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .specs thead th {
+    padding: 0 0 16px;
+    text-align: left;
+    font-family: var(--font-mono);
+    font-size: var(--fs-mono);
+    font-weight: 400;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+
+  .specs tbody th,
+  .specs td {
+    padding: 22px 0;
+    border-top: 1px solid var(--line);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .specs tbody th {
+    width: 45%;
+    padding-right: 24px;
+    font-weight: 500;
+  }
+
+  .specs td {
+    display: grid;
+    gap: 4px;
+    font-family: var(--font-display);
+    font-size: clamp(1rem, 1.5vw, 1.25rem);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 620px) {
+    .specs tbody tr {
+      display: grid;
+      border-top: 1px solid var(--line);
+      padding: 18px 0;
+    }
+
+    .specs tbody th,
+    .specs td {
+      width: auto;
+      padding: 0;
+      border: 0;
+    }
+
+    .specs td {
+      margin-top: 8px;
+    }
+
+    .specs thead {
+      display: none;
+    }
+  }
+</style>

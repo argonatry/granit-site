@@ -1,0 +1,64 @@
+---
+import { getImage } from 'astro:assets';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import Catalog from '../../components/Catalog.astro';
+import Calculator from '../../components/Calculator.astro';
+import Usage from '../../components/Usage.astro';
+import Contacts from '../../components/Contacts.astro';
+import Button from '../../components/Button.astro';
+import { catalog, products, site } from '../../lib/data';
+import { img } from '../../lib/images';
+import { productsSchema } from '../../lib/schema';
+
+const productImages = Object.fromEntries(
+  await Promise.all(products.map(async (p) => [p.id, (await getImage({ src: img(p.image), width: 300, format: 'jpg' })).src])),
+);
+---
+
+<Base
+  title="Продукція і ціни — гранітний щебінь, відсів, ЩПС, бут | Любимівський кар’єр"
+  description="Ціни на гранітний щебінь фракцій 5-10, 10-20, 5-20, 20-40, 40-70 мм, гранітний відсів 0-5, ЩПС С5 і С7, бутовий камінь та суглинок за тонну з ПДВ. Сертифікати та паспорти на кожну позицію."
+  breadcrumb="Продукція"
+  ogImage="/assets/images/quarry/frontalnyi-navantazhuvach-sklad.jpg"
+  schema={[productsSchema(productImages, `${site.url}/production/`)]}
+>
+  <PageHero
+    eyebrow="Продукція"
+    title="Гранітний щебінь та камінь"
+    lead="Продукція ТОВ «Любимівський кар’єр»: щебінь, відсів, щебенево-піщані суміші, бутовий камінь і суглинок з власного кар’єру. Ціни — за тонну з ПДВ."
+  >
+    <div class="prod__cta" data-reveal>
+      <Button data-order>Замовити</Button>
+      <Button variant="ghost" href={catalog.priceList.file} icon="file" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>{catalog.priceList.label}</Button>
+    </div>
+  </PageHero>
+
+  <section class="section section--tight" aria-label="Каталог продукції">
+    <div class="container">
+      <Catalog table />
+    </div>
+  </section>
+
+  <Calculator />
+
+  <section class="section" aria-labelledby="usage-title">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Застосування</p>
+        <h2 class="h2" id="usage-title" data-split>Яку фракцію обрати</h2>
+      </div>
+      <Usage />
+    </div>
+  </section>
+
+  <Contacts />
+</Base>
+
+<style>
+  .prod__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

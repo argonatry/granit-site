@@ -1,0 +1,49 @@
+---
+import Base from '../layouts/Base.astro';
+import Button from '../components/Button.astro';
+---
+
+<Base title="Сторінку не знайдено — Любимівський кар’єр" description="Такої сторінки немає. Перейдіть на головну або до каталогу продукції.">
+  <section class="nf">
+    <div class="container">
+      <p class="nf__code" aria-hidden="true">404</p>
+      <h1 class="h2">Сторінку не знайдено</h1>
+      <p class="lead">Можливо, її перенесли. Почніть з головної або перегляньте продукцію.</p>
+      <div class="nf__cta">
+        <Button href="/">На головну</Button>
+        <Button href="/production/" variant="ghost">Продукція</Button>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    min-height: 100svh;
+    display: grid;
+    align-items: center;
+    padding-top: var(--header-h);
+  }
+
+  .nf .container {
+    display: grid;
+    gap: 24px;
+    justify-items: start;
+  }
+
+  .nf__code {
+    font-family: var(--font-display);
+    font-size: var(--fs-mega);
+    font-weight: 700;
+    line-height: 0.8;
+    letter-spacing: -0.06em;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--accent);
+  }
+
+  .nf__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+</style>

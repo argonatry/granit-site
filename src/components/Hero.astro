@@ -1,0 +1,211 @@
+---
+import Picture from './Picture.astro';
+import Button from './Button.astro';
+import { site, catalog } from '../lib/data';
+---
+
+<section class="hero" data-hero>
+  <div class="hero__media" data-hero-media>
+    <Picture
+      src="/assets/images/quarry/hero-poster.jpg"
+      alt="Любимівський гранітний кар’єр з висоти"
+      class="hero__poster"
+      loading="eager"
+      fetchpriority="high"
+      widths={[640, 960, 1280]}
+    />
+    <video class="hero__video" muted loop playsinline preload="none" aria-hidden="true" data-hero-video>
+      <source data-src="/video/hero.webm" type="video/webm" />
+      <source data-src="/video/hero.mp4" type="video/mp4" />
+    </video>
+    <div class="hero__shade"></div>
+  </div>
+
+  <div class="hero__content container">
+    <p class="eyebrow" data-hero-fade>{site.name} · Дніпро</p>
+    <h1 class="hero__title">
+      <span class="hero__l1" data-split="hero">Граніт</span>
+      <span class="hero__l2" data-split="hero">з власного кар’єру</span>
+    </h1>
+
+    <div class="hero__bottom">
+      <div class="hero__slogans lead" data-hero-fade data-slogans>
+        {site.slogans.map((s, i) => <p class="hero__slogan" data-slogan aria-hidden={i > 0 ? 'true' : undefined}>{s}</p>)}
+      </div>
+      <div class="hero__cta" data-hero-fade>
+        <Button data-order>Замовити щебінь</Button>
+        <Button variant="ghost" href={catalog.priceList.file} icon="file" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>Прайс-лист</Button>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero__meta container mono" data-hero-fade>
+    <span>{site.geo.lat.toFixed(4)}° N / {site.geo.lng.toFixed(4)}° E</span>
+    <span class="hero__scroll"><i></i>Гортайте</span>
+    <span>ЄДРПОУ {site.edrpou}</span>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: 100svh;
+    display: grid;
+    grid-template-rows: 1fr auto;
+    overflow: clip;
+  }
+
+  .hero__media {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+    background: #11100e;
+    will-change: clip-path;
+  }
+
+  .hero__media :global(img),
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .hero__video {
+    opacity: 0;
+    transition: opacity 1.2s ease;
+  }
+
+  .hero__video.is-playing {
+    opacity: 1;
+  }
+
+  .hero__shade {
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(180deg, rgba(13, 13, 12, 0.72) 0%, rgba(13, 13, 12, 0.3) 26%, rgba(13, 13, 12, 0.4) 55%, rgba(13, 13, 12, 0.94) 100%),
+      radial-gradient(120% 80% at 20% 100%, rgba(13, 13, 12, 0.75), transparent 60%);
+  }
+
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: grid;
+    align-content: end;
+    gap: clamp(20px, 3vw, 36px);
+    padding-top: calc(var(--header-h) + 40px);
+    padding-bottom: clamp(28px, 4vw, 48px);
+  }
+
+  .hero__title {
+    display: grid;
+    font-family: var(--font-display);
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: -0.045em;
+    line-height: 0.86;
+  }
+
+  .hero__l1 {
+    font-size: var(--fs-mega);
+  }
+
+  .hero__l2 {
+    font-size: clamp(1.7rem, 5.6vw, 5.6rem);
+    letter-spacing: -0.035em;
+    line-height: 1;
+    color: var(--accent);
+    margin-top: 0.12em;
+    text-wrap: balance;
+  }
+
+  .hero__content .eyebrow {
+    color: var(--text-2);
+  }
+
+  .hero__bottom {
+    display: grid;
+    gap: 28px;
+    align-items: end;
+  }
+
+  .hero__slogans {
+    display: grid;
+    max-width: 52ch;
+  }
+
+  .hero__slogan {
+    grid-area: 1 / 1;
+  }
+
+  :global(.js) .hero__slogan + .hero__slogan {
+    opacity: 0;
+  }
+
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  @media (min-width: 960px) {
+    .hero__bottom {
+      grid-template-columns: 1fr auto;
+    }
+  }
+
+  .hero__meta {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 18px;
+    padding-bottom: calc(22px + var(--mobilebar, 0px));
+    color: var(--text-2);
+    border-top: 1px solid var(--line);
+  }
+
+  .hero__meta > span:last-child {
+    display: none;
+  }
+
+  .hero__scroll {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .hero__scroll i {
+    position: relative;
+    width: 1px;
+    height: 22px;
+    background: var(--line-2);
+    overflow: hidden;
+  }
+
+  .hero__scroll i::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--accent);
+    animation: scroll-hint 2s var(--ease-io) infinite;
+  }
+
+  @keyframes scroll-hint {
+    from {
+      transform: translateY(-100%);
+    }
+    to {
+      transform: translateY(100%);
+    }
+  }
+
+  @media (min-width: 720px) {
+    .hero__meta > span:last-child {
+      display: inline;
+    }
+  }
+</style>

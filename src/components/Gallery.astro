@@ -1,0 +1,151 @@
+---
+import Picture from './Picture.astro';
+import { gallery } from '../lib/data';
+import { large } from '../lib/images';
+
+const items = await Promise.all(gallery.map(async (g) => ({ ...g, big: await large(g.image, 1600) })));
+---
+
+<section class="gallery" aria-labelledby="gallery-title" data-gallery>
+  <div class="gallery__pin" data-gallery-pin>
+    <div class="container gallery__head">
+      <p class="eyebrow">Фотогалерея</p>
+      <h2 class="h2" id="gallery-title" data-split>Кар’єр зсередини</h2>
+      <p class="gallery__count mono muted"><span data-gallery-progress>01</span> / {String(items.length).padStart(2, '0')}</p>
+    </div>
+    <div class="gallery__viewport" data-gallery-viewport>
+      <ul class="gallery__track" data-gallery-track data-pswp-gallery>
+        {
+          items.map((item, i) => (
+            <li class="gallery__item">
+              <a
+                href={item.big.src}
+                class="gallery__link"
+                data-pswp-width={item.big.width}
+                data-pswp-height={item.big.height}
+                data-pswp-caption={item.caption}
+              >
+                <span class="gallery__media media tone">
+                  <Picture src={item.image} alt={item.caption} widths={[480, 800, 1280]} sizes="(min-width: 960px) 46vw, 82vw" />
+                </span>
+              </a>
+              <p class="gallery__caption">
+                <span class="mono accent">{String(i + 1).padStart(2, '0')}</span>
+                <span>{item.caption}</span>
+              </p>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </div>
+</section>
+
+<style>
+  .gallery {
+    position: relative;
+    padding-top: clamp(80px, 12vw, 160px);
+    padding-bottom: clamp(60px, 8vw, 120px);
+    overflow: clip;
+  }
+
+  .gallery__pin {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(32px, 4vw, 56px);
+  }
+
+  .gallery__head {
+    display: grid;
+    gap: 18px;
+  }
+
+  .gallery__count {
+    font-size: 0.9rem;
+  }
+
+  .gallery__viewport {
+    min-width: 0;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    padding-inline: var(--gutter);
+    scroll-padding-inline: var(--gutter);
+  }
+
+  .gallery__viewport::-webkit-scrollbar {
+    display: none;
+  }
+
+  .gallery__track {
+    display: flex;
+    gap: clamp(12px, 1.6vw, 24px);
+    width: max-content;
+  }
+
+  .gallery__item {
+    display: grid;
+    gap: 14px;
+    width: 82vw;
+    scroll-snap-align: start;
+  }
+
+  .gallery__item:nth-child(3n + 2) .gallery__media {
+    aspect-ratio: 4 / 5;
+  }
+
+  .gallery__link {
+    display: block;
+  }
+
+  .gallery__media {
+    display: block;
+    aspect-ratio: 16 / 11;
+    border-radius: var(--radius);
+  }
+
+  .gallery__media :global(img) {
+    transition: transform 1.2s var(--ease), filter 0.6s;
+  }
+
+  .gallery__link:hover .gallery__media :global(img) {
+    transform: scale(1.06);
+  }
+
+  .gallery__caption {
+    display: flex;
+    gap: 12px;
+    max-width: 46ch;
+    font-size: 0.88rem;
+    color: var(--text-2);
+  }
+
+  @media (min-width: 960px) {
+    .gallery__head {
+      grid-template-columns: 1fr auto;
+      align-items: end;
+    }
+
+    .gallery__head .eyebrow {
+      grid-column: 1 / -1;
+    }
+
+    .gallery__item {
+      width: clamp(420px, 40vw, 720px);
+    }
+
+    .gallery__item:nth-child(3n + 2) {
+      width: clamp(300px, 26vw, 460px);
+    }
+  }
+
+  :global(.gallery--pinned) .gallery__viewport {
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+
+  :global(.gallery--pinned) .gallery__pin {
+    min-height: 100vh;
+    align-content: center;
+  }
+</style>
