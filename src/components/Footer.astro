@@ -3,6 +3,7 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import { img } from '../lib/images';
 import { nav, site, catalog } from '../lib/data';
+import { url } from '../lib/url';
 
 const logo = img('/assets/images/brand/logo-mark-light.png');
 const year = new Date().getFullYear();
@@ -17,7 +18,7 @@ const year = new Date().getFullYear();
       </div>
       <nav class="footer__col" aria-label="Розділи">
         <p class="mono muted">Розділи</p>
-        <a href="/" class="link-line">Головна</a>
+        <a href={url('/')} class="link-line">Головна</a>
         {nav.map((n) => <a href={n.href} class="link-line">{n.label}</a>)}
         <a href={catalog.priceList.file} class="link-line" data-pdf={catalog.priceList.file} data-pdf-title={catalog.priceList.label}>{catalog.priceList.label}</a>
       </nav>

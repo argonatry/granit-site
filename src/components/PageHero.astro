@@ -1,5 +1,6 @@
 ---
 import Picture from './Picture.astro';
+import { url } from '../lib/url';
 
 interface Props {
   eyebrow: string;
@@ -15,7 +16,7 @@ const { eyebrow, title, lead, image, alt = '' } = Astro.props;
 <section class="phero">
   <div class="container">
     <nav class="phero__crumbs mono" aria-label="Хлібні крихти">
-      <a href="/" class="link-line">Головна</a>
+      <a href={url('/')} class="link-line">Головна</a>
       <span aria-hidden="true">/</span>
       <span aria-current="page">{eyebrow}</span>
     </nav>

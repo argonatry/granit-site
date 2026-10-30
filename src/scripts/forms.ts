@@ -1,6 +1,7 @@
 import { $, $$ } from './env';
 import { lockScroll, unlockScroll } from './scroll';
 import { estimate, formatMoney } from './catalog-data';
+import { url } from '../lib/url';
 
 type FormKind = 'order' | 'feedback';
 
@@ -115,7 +116,7 @@ async function submit(form: HTMLFormElement, kind: FormKind, onSuccess: () => vo
 
   setBusy(form, true);
   try {
-    const response = await fetch('/api/order', {
+    const response = await fetch(url('/api/order'), {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ ...data, phone: `+38${phoneDigits(data.phone)}` }),

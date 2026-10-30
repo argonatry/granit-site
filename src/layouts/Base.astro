@@ -12,6 +12,7 @@ import MediaDialogs from '../components/MediaDialogs.astro';
 import { img } from '../lib/images';
 import { site, products } from '../lib/data';
 import { organizationSchema, breadcrumbSchema } from '../lib/schema';
+import { url } from '../lib/url';
 
 interface Props {
   title: string;
@@ -60,7 +61,7 @@ const turnstileKey = import.meta.env.PUBLIC_TURNSTILE_SITE_KEY;
     <link rel="icon" type="image/png" sizes="32x32" href={favicon32.src} />
     <link rel="icon" type="image/png" sizes="192x192" href={favicon192.src} />
     <link rel="apple-touch-icon" href={apple.src} />
-    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
 
     <meta property="og:type" content="website" />
     <meta property="og:locale" content="uk_UA" />

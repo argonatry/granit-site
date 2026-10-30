@@ -2,6 +2,7 @@
 import Picture from './Picture.astro';
 import Button from './Button.astro';
 import { site, catalog } from '../lib/data';
+import { url } from '../lib/url';
 ---
 
 <section class="hero" data-hero>
@@ -15,8 +16,8 @@ import { site, catalog } from '../lib/data';
       widths={[640, 960, 1280]}
     />
     <video class="hero__video" muted loop playsinline preload="none" aria-hidden="true" data-hero-video>
-      <source data-src="/video/hero.webm" type="video/webm" />
-      <source data-src="/video/hero.mp4" type="video/mp4" />
+      <source data-src={url('/video/hero.webm')} type="video/webm" />
+      <source data-src={url('/video/hero.mp4')} type="video/mp4" />
     </video>
     <div class="hero__shade"></div>
   </div>

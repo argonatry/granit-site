@@ -2,6 +2,7 @@
 import Icon from './Icon.astro';
 import { img } from '../lib/images';
 import { getImage } from 'astro:assets';
+import { url } from '../lib/url';
 
 const poster = await getImage({ src: img('/assets/images/quarry/video-poster.jpg'), width: 1280, format: 'webp' });
 ---
@@ -24,7 +25,7 @@ const poster = await getImage({ src: img('/assets/images/quarry/video-poster.jpg
 <dialog class="dialog video" id="video-dialog" aria-label="Відео: кар’єр з висоти" data-video-dialog>
   <button class="dialog__close" type="button" data-dialog-close aria-label="Закрити"><Icon name="close" /></button>
   <video controls playsinline preload="none" poster={poster.src} data-video-full>
-    <source data-src="/video/karyer-z-vysoty.mp4" type="video/mp4" />
+    <source data-src={url('/video/karyer-z-vysoty.mp4')} type="video/mp4" />
   </video>
 </dialog>
 

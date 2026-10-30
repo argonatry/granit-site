@@ -4,6 +4,7 @@ import Icon from './Icon.astro';
 import Button from './Button.astro';
 import { img } from '../lib/images';
 import { nav, site, catalog } from '../lib/data';
+import { url } from '../lib/url';
 
 const path = Astro.url.pathname;
 const logo = img('/assets/images/brand/logo-mark-light.png');
@@ -11,7 +12,7 @@ const logo = img('/assets/images/brand/logo-mark-light.png');
 
 <header class="header" data-header>
   <div class="header__inner container">
-    <a href="/" class="header__logo" aria-label={`${site.name} — на головну`}>
+    <a href={url('/')} class="header__logo" aria-label={`${site.name} — на головну`}>
       <Image src={logo} alt={site.name} width={190} densities={[1, 2]} loading="eager" />
     </a>
 
@@ -44,7 +45,7 @@ const logo = img('/assets/images/brand/logo-mark-light.png');
   <div class="menu__bg" data-menu-bg></div>
   <div class="menu__inner container">
     <nav class="menu__nav" aria-label="Мобільне меню">
-      <a href="/" class="menu__link" data-menu-item><span class="mono">00</span><span>Головна</span></a>
+      <a href={url('/')} class="menu__link" data-menu-item><span class="mono">00</span><span>Головна</span></a>
       {
         nav.map((item, i) => (
           <a href={item.href} class="menu__link" data-menu-item>
