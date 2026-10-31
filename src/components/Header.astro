@@ -7,13 +7,13 @@ import { nav, site, catalog } from '../lib/data';
 import { url } from '../lib/url';
 
 const path = Astro.url.pathname;
-const logo = img('/assets/images/brand/logo-mark-light.png');
+const logo = img('/assets/images/brand/logo-shield.png');
 ---
 
 <header class="header" data-header>
   <div class="header__inner container">
     <a href={url('/')} class="header__logo" aria-label={`${site.name} — на головну`}>
-      <Image src={logo} alt={site.name} width={190} densities={[1, 2]} loading="eager" />
+      <Image src={logo} alt={site.name} width={72} densities={[1, 2]} loading="eager" />
     </a>
 
     <nav class="header__nav" aria-label="Головне меню">
@@ -112,8 +112,8 @@ const logo = img('/assets/images/brand/logo-mark-light.png');
   }
 
   .header__logo img {
-    width: clamp(150px, 14vw, 190px);
-    height: auto;
+    width: auto;
+    height: clamp(52px, 4.6vw, 64px);
   }
 
   .header__nav {

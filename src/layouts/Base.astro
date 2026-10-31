@@ -26,7 +26,7 @@ const { title, description, ogImage = '/assets/images/quarry/hero-poster.jpg', b
 const canonical = new URL(Astro.url.pathname, site.url).href;
 
 const og = await getImage({ src: img(ogImage), width: 1200, height: 630, fit: 'cover', format: 'jpg', quality: 80 });
-const logo = await getImage({ src: img('/assets/images/brand/logo-v2.png'), width: 600, format: 'png' });
+const logo = await getImage({ src: img('/assets/images/brand/logo-shield.png'), width: 600, format: 'png' });
 const icon = img('/assets/images/brand/icon-512.png');
 const favicon32 = await getImage({ src: icon, width: 32, height: 32, format: 'png' });
 const favicon192 = await getImage({ src: icon, width: 192, height: 192, format: 'png' });

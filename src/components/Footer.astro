@@ -5,7 +5,8 @@ import { img } from '../lib/images';
 import { nav, site, catalog } from '../lib/data';
 import { url } from '../lib/url';
 
-const logo = img('/assets/images/brand/logo-mark-light.png');
+const logo = img('/assets/images/brand/logo-shield.png');
+const lk = img('/assets/images/brand/lk-light.png');
 const year = new Date().getFullYear();
 ---
 
@@ -13,7 +14,7 @@ const year = new Date().getFullYear();
   <div class="container">
     <div class="footer__top">
       <div class="footer__brand">
-        <Image src={logo} alt={site.name} width={220} densities={[1, 2]} />
+        <Image src={logo} alt={site.name} width={150} densities={[1, 2]} />
         <p class="muted">{site.slogans[0]}.</p>
       </div>
       <nav class="footer__col" aria-label="Розділи">
@@ -35,10 +36,13 @@ const year = new Date().getFullYear();
       </div>
     </div>
 
-    <p class="footer__mega" aria-hidden="true" data-footer-mega>
-      <span>Любимівський</span>
-      <span>кар’єр</span>
-    </p>
+    <div class="footer__wordmark" aria-hidden="true" data-footer-mega>
+      <Image src={lk} alt="" width={240} densities={[1, 2]} class="footer__lk" />
+      <p class="footer__mega">
+        <span>Любимівський</span>
+        <span>кар’єр</span>
+      </p>
+    </div>
 
     <div class="footer__bottom mono muted">
       <span>© {site.foundedYear} – {year} ТОВ Любимівський Кар’єр</span>
@@ -69,7 +73,7 @@ const year = new Date().getFullYear();
   }
 
   .footer__brand img {
-    width: 220px;
+    width: 150px;
     height: auto;
   }
 
@@ -93,11 +97,24 @@ const year = new Date().getFullYear();
     color: var(--accent);
   }
 
+  .footer__wordmark {
+    display: flex;
+    align-items: center;
+    gap: 0.32em;
+    margin: clamp(56px, 8vw, 120px) 0 28px;
+    font-size: clamp(1.4rem, 6.2vw, 7.8rem);
+  }
+
+  .footer__wordmark :global(.footer__lk) {
+    flex: none;
+    width: auto;
+    height: 1.6em;
+  }
+
   .footer__mega {
     display: grid;
-    margin: clamp(56px, 8vw, 120px) 0 28px;
     font-family: var(--font-display);
-    font-size: clamp(2.2rem, 8.4vw, 10.5rem);
+    font-size: 1em;
     font-weight: 700;
     line-height: 0.86;
     letter-spacing: -0.05em;
